@@ -4,8 +4,17 @@ var MainNode = cc.Node.extend({
     ctor:function()
     {
         this._super();
-        // 圆的半径
+
         this.radius = 30;
+
+        // 每秒旋转多少度
+        this.deltaAngel = 36;
+
+        // 当前移动了多少像素
+        this.moveDis = 0;
+
+        // 每秒前进多少像素
+        this.moveSpeed = 300;
     },
 
     init:function()
@@ -60,5 +69,25 @@ var MainNode = cc.Node.extend({
         }
     },
 
+    update:function(ts, isStart, isLongPress)
+    {
+        var angel = ts * this.deltaAngel;
+        this.setRotation(this.getRotation() + angel);
 
+        if (isStart)
+        {
+            if (isLongPress)
+            {
+                this.moveDis = this.moveDis - this.moveSpeed * ts;
+                this.showArrow(2);
+            }
+            else
+            {
+                this.moveDis = this.moveDis + this.moveSpeed * ts;
+                this.showArrow(1)
+            }
+
+            this.circleNode.setPositionY(this.moveDis);
+        }
+    },
 });

@@ -5,6 +5,11 @@ var BlockNode = cc.Node.extend({
     {
         this._super();
         this.radius = 30;
+
+        // 每秒前进多少像素
+        this.moveSpeed = 300;
+
+        
     },
 
     init:function()
@@ -48,6 +53,13 @@ var BlockNode = cc.Node.extend({
         this.blockDot2 = new cc.DrawNode();
         this.blockDot2.drawDot(cc.p(0, 0), 15, cc.color(0, 255, 0));
         this.blockNode2.addChild(this.blockDot2);
+    },
+
+    update:function(ts)
+    {
+        var dis = this.moveSpeed * ts * 0.5;
+
+        this.setPositionY(this.getPositionY() + dis);
     },
 
 });

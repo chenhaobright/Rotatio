@@ -23,18 +23,6 @@ var GameLayer = cc.Layer.extend({
     // 初始化游戏数据
     initData:function()
     {
-        // 每秒旋转多少度
-        this.deltaAngel = 36;
-
-        // 每秒前进多少像素
-        this.moveSpeed = 300;
-
-        // 当前移动了多少像素
-        this.moveDis = 0;
-
-        // 圆的半径
-        this.radius = 30;
-
         // 是否长按
         isLongPress = false;
 
@@ -81,7 +69,6 @@ var GameLayer = cc.Layer.extend({
             onTouchBegan: function (touch, event) {
                 isStart = true;
                 isLongPress = true;
-
                 return true;
             },
             onTouchEnded: function (touch, event) {
@@ -95,36 +82,27 @@ var GameLayer = cc.Layer.extend({
     // 每帧更新函数
     update:function (ts)
     {
-        var size = cc.winSize;
-        var angel = ts * this.deltaAngel;
-        this.mainNode.setRotation(this.mainNode.getRotation() + angel);
+        // 更新主节点
+        this.mainNode.update(ts, isStart, isLongPress);
 
         if (isStart)
         {
             this.tapLabel.setVisible(false);
 
-            if (isLongPress)
-            {
-                this.moveDis = this.moveDis - this.moveSpeed * ts;
-                this.mainNode.showArrow(2);
-            }
-            else
-            {
-                this.moveDis = this.moveDis + this.moveSpeed * ts;
-                this.mainNode.showArrow(1)
-            }
+            // 更新障碍物
+            this.blockNode.update(ts, isStart);
 
-            this.updateBlock(ts);
-            this.mainNode.circleNode.setPositionY(this.moveDis);
-
+            // 更新主节点状态，查看是否碰撞和通关
             this.updateState(ts);
 
+            // 如果发生碰撞
             if (this.isCollision)
             {
                 this.isCollision = false;
                 cc.log("不好意思， 碰撞了");
-
             }
+
+            // 如果通过障碍物
             if (this.isPass)
             {
                 this.isPass = false;
@@ -132,27 +110,20 @@ var GameLayer = cc.Layer.extend({
             }
         }
 
-        //cc.log(ts);
-    },
-
-    // 更新障碍物
-    updateBlock:function(ts)
-    {
-        var dis = this.moveSpeed * ts * 0.5;
-
-        this.blockNode.setPositionY(this.blockNode.getPositionY() + dis);
     },
 
     // 更新当前游戏状态，是碰撞了，还是通关
     // 碰撞检测,分为和边缘碰撞、障碍物碰撞
     updateState:function(ts)
     {
-        var rot = this.mainNode.getRotation();
-        var rad = this.radius;
         var size = cc.winSize;
 
-        var posX = size.width  / 2 + this.moveDis * Math.sin(rot);
-        var posY = size.height / 2 + this.moveDis * Math.cos(rot);
+        var rot = this.mainNode.getRotation();
+        var moveDis = this.mainNode.moveDis;
+        var rad = this.mainNode.radius;
+
+        var posX = size.width  / 2 + moveDis * Math.sin(rot);
+        var posY = size.height / 2 + moveDis * Math.cos(rot);
 
         // 1、判断是否和边缘碰撞
         if ((posX - rad <= 0) || (posX + rad >= size.width) || (posY - rad <= 0) || (posY + rad >= size.height))
