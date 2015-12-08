@@ -9,7 +9,15 @@ var BlockNode = cc.Node.extend({
         // 每秒前进多少像素
         this.moveSpeed = 300;
 
-        
+        // 通过阻挡大门的长度
+        this.passLen = cc.winSize.width / 4;
+
+        this.passType = 0; // 只有-1，0， 1三种值，-1表示左边，0表示中间，1表示右边
+
+        this.passDirect = 0; // 有8个方向：左、右、上、下、左上、左下、右上、右下
+
+        this.passCount = 0; // 通过次数
+
     },
 
     init:function()
