@@ -10,7 +10,7 @@ var BlockNode = cc.Node.extend({
         this.moveSpeed = 300;
 
         // 通过阻挡大门的长度
-        this.passLen = cc.winSize.width / 4;
+        this.passLen = cc.winSize.width / 6;
 
         this.passType = 0; // 只有-1，0， 1三种值，-1表示左边，0表示中间，1表示右边
 
@@ -22,9 +22,13 @@ var BlockNode = cc.Node.extend({
 
     init:function()
     {
+        this.passType = -1;
+        var size = cc.winSize;
+        this.setPosition(size.width / 2 + this.passType * this.passLen, 0);
+
         // 阻挡节点1
         this.blockNode1 = new cc.Node();
-        this.blockNode1.setPosition(-cc.winSize.width / 4, 0);
+        this.blockNode1.setPosition(-this.passLen, 0);
         this.addChild(this.blockNode1);
 
         // 绘制阻挡直线1
@@ -44,7 +48,7 @@ var BlockNode = cc.Node.extend({
 
         // 阻挡节点2
         this.blockNode2 = new cc.Node();
-        this.blockNode2.setPosition(cc.winSize.width / 4, 0);
+        this.blockNode2.setPosition(this.passLen, 0);
         this.addChild(this.blockNode2);
 
         // 绘制阻挡直线2

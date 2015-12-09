@@ -23,6 +23,12 @@ var GameLayer = cc.Layer.extend({
     // 初始化游戏数据
     initData:function()
     {
+        this.rotDis = cc.winSize.width / 4;
+        this.rotPos = cc.p(cc.winSize.width / 2 + this.rotDis , cc.winSize.height / 2);
+
+        // 每秒公转速度
+        this.revolutionSpeed = 36;
+
         // 是否长按
         isLongPress = false;
 
@@ -31,7 +37,17 @@ var GameLayer = cc.Layer.extend({
 
         this.isCollision = false;
         this.isPass = false;
+    },
 
+    // 新的公转旋转点位置
+    updateRotPos:function ()
+    {
+        this.rotPos.x = 2 * this.rotPos.x - this.mainNode.getPositionX();
+        this.rotPos.y = 2 * this.rotPos.y - this.mainNode.getPositionY();
+
+        this.dotNode.setPosition(this.rotPos);
+
+        return this.rotPos
     },
 
     // 初始化UI
@@ -52,9 +68,13 @@ var GameLayer = cc.Layer.extend({
 
         // 初始化障碍物UI
         this.blockNode = new BlockNode();
-        this.blockNode.setPosition(size.width / 2, 0);
         this.blockNode.init();
         this.addChild(this.blockNode);
+
+        this.dotNode = new cc.DrawNode();
+        this.dotNode.setPosition(this.rotPos);
+        this.dotNode.drawDot(cc.p(0, 0), 10, cc.color(255, 255, 255));
+        this.addChild(this.dotNode);
 
 
         // 显示分数
@@ -73,6 +93,7 @@ var GameLayer = cc.Layer.extend({
             },
             onTouchEnded: function (touch, event) {
                 isLongPress = false;
+                this.updateRotPos()
             },
         });
 
@@ -84,6 +105,23 @@ var GameLayer = cc.Layer.extend({
     {
         // 更新主节点
         this.mainNode.update(ts, isStart, isLongPress);
+
+        if(isLongPress)
+        {
+
+        }
+
+        // 主节点公转
+        var angel = ts * this.revolutionSpeed;
+        var rot = this.mainNode.getRotation() + angel
+        this.mainNode.setRotation(rot);
+
+        rot = 3.14 * rot / 180;
+
+
+        var posX = this.rotPos.x + this.rotDis * Math.sin(rot);
+        var posY = this.rotPos.y + this.rotDis * Math.cos(rot);
+        this.mainNode.setPosition(posX, posY);
 
         if (isStart)
         {
@@ -99,14 +137,14 @@ var GameLayer = cc.Layer.extend({
             if (this.isCollision)
             {
                 this.isCollision = false;
-                cc.log("不好意思， 碰撞了");
+                //cc.log("不好意思， 碰撞了");
             }
 
             // 如果通过障碍物
             if (this.isPass)
             {
                 this.isPass = false;
-                cc.log("恭喜你，通过一关");
+                //cc.log("恭喜你，通过一关");
             }
         }
 
@@ -128,7 +166,7 @@ var GameLayer = cc.Layer.extend({
         // 1、判断是否和边缘碰撞
         if ((posX - rad <= 0) || (posX + rad >= size.width) || (posY - rad <= 0) || (posY + rad >= size.height))
         {
-            cc.log("collison1");
+            //cc.log("collison1");
             this.isCollision = true;
             return;
         }
@@ -153,13 +191,13 @@ var GameLayer = cc.Layer.extend({
             if (posX + rad <= size.width / 2 + size.width / 4 && posX - rad >= size.width / 2 - size.width / 4)
             {
                 this.isPass = true;
-                cc.log("isPass", true);
+                //cc.log("isPass", true);
                 return;
             }
             else
             {
                 this.isCollision = true;
-                cc.log("isCollision", true);
+                //cc.log("isCollision", true);
                 return ;
             }
         }

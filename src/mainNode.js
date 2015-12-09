@@ -7,8 +7,8 @@ var MainNode = cc.Node.extend({
 
         this.radius = 30;
 
-        // 每秒旋转多少度
-        this.deltaAngel = 36;
+        // 每秒自转速度
+        this.rotationSpeed = 36;
 
         // 当前移动了多少像素
         this.moveDis = 0;
@@ -71,7 +71,8 @@ var MainNode = cc.Node.extend({
 
     update:function(ts, isStart, isLongPress)
     {
-        var angel = ts * this.deltaAngel;
+        // 自转
+        var angel = ts * this.rotationSpeed;
         this.setRotation(this.getRotation() + angel);
 
         if (isStart)
