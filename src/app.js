@@ -23,8 +23,8 @@ var GameLayer = cc.Layer.extend({
     // 初始化游戏数据
     initData:function()
     {
-        this.rotDis = cc.winSize.width / 4;
-        this.rotPos = cc.p(cc.winSize.width / 2 - this.rotDis , cc.winSize.height / 2);
+        this.rotDis = cc.winSize.width / 10;
+        this.rotPos = cc.p(cc.winSize.width / 2 + this.rotDis , cc.winSize.height / 2);
         this.rotDir = 1; // 旋转方向，1表示顺时针， -1表示逆时针
 
         // 每秒公转速度
@@ -69,6 +69,7 @@ var GameLayer = cc.Layer.extend({
         // 显示主节点，即玩家操作的节点
         this.mainNode = new MainNode();
         this.mainNode.setPosition(size.width / 2, size.height / 2);
+        this.mainNode.setRotation(180);
         this.mainNode.init();
         this.addChild(this.mainNode);
 
@@ -123,7 +124,7 @@ var GameLayer = cc.Layer.extend({
         this.mainNode.setRotation(rot);
 
         //cc.log("_________rot", rot, angel, Math.abs(rot / 90), this.rotNum)
-        if (Math.abs(this.rotNum ) / 360 >= 1)
+        if (Math.abs(this.rotNum ) / 90 >= 1)
         {
             this.updateRotPos();
             this.rotNum = 0;
@@ -132,10 +133,11 @@ var GameLayer = cc.Layer.extend({
 
         var hudu = 3.14 * rot / 180;
 
-        var posX = this.rotPos.x + this.rotDis * Math.cos(hudu);
-        var posY = this.rotPos.y + this.rotDis * Math.sin(hudu);
+        var posX = this.rotPos.x + this.rotDis * Math.cos(hudu) * this.rotDir;
+        var posY = this.rotPos.y + this.rotDis * Math.sin(hudu) * this.rotDir;
 
-        cc.log(posX, posY);
+        cc.log(posX, posY, hudu, this.rotPos.x, this.rotPos.y);
+
         this.mainNode.setPosition(posX, posY);
 
         if (isStart)
