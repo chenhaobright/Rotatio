@@ -24,7 +24,8 @@ var GameLayer = cc.Layer.extend({
     initData:function()
     {
         this.rotDis = cc.winSize.width / 4;
-        this.rotPos = cc.p(cc.winSize.width / 2 + this.rotDis , cc.winSize.height / 2);
+        this.rotPos = cc.p(cc.winSize.width / 2 - this.rotDis , cc.winSize.height / 2);
+        this.rotDir = 1; // 旋转方向，1表示顺时针， -1表示逆时针
 
         // 每秒公转速度
         this.revolutionSpeed = 36;
@@ -37,13 +38,18 @@ var GameLayer = cc.Layer.extend({
 
         this.isCollision = false;
         this.isPass = false;
+
+        this.rotNum = 0;
     },
 
     // 新的公转旋转点位置
     updateRotPos:function ()
     {
-        this.rotPos.x = 2 * this.rotPos.x - this.mainNode.getPositionX();
-        this.rotPos.y = 2 * this.rotPos.y - this.mainNode.getPositionY();
+        cc.log(this.rotPos.x, this.mainNode.getPositionX())
+        cc.log(this.rotPos.y, this.mainNode.getPositionY())
+
+        this.rotPos.x = 2 * this.mainNode.getPositionX() - this.rotPos.x;
+        this.rotPos.y = 2 * this.mainNode.getPositionY() - this.rotPos.y;
 
         this.dotNode.setPosition(this.rotPos);
 
@@ -93,7 +99,6 @@ var GameLayer = cc.Layer.extend({
             },
             onTouchEnded: function (touch, event) {
                 isLongPress = false;
-                this.updateRotPos()
             },
         });
 
@@ -104,7 +109,7 @@ var GameLayer = cc.Layer.extend({
     update:function (ts)
     {
         // 更新主节点
-        this.mainNode.update(ts, isStart, isLongPress);
+        //this.mainNode.update(ts, isStart, isLongPress);
 
         if(isLongPress)
         {
@@ -112,15 +117,25 @@ var GameLayer = cc.Layer.extend({
         }
 
         // 主节点公转
-        var angel = ts * this.revolutionSpeed;
+        var angel = ts * this.revolutionSpeed * this.rotDir;
+        this.rotNum = this.rotNum + angel
         var rot = this.mainNode.getRotation() + angel
         this.mainNode.setRotation(rot);
 
-        rot = 3.14 * rot / 180;
+        //cc.log("_________rot", rot, angel, Math.abs(rot / 90), this.rotNum)
+        if (Math.abs(this.rotNum ) / 360 >= 1)
+        {
+            this.updateRotPos();
+            this.rotNum = 0;
+            this.rotDir = this.rotDir * -1;
+        }
 
+        var hudu = 3.14 * rot / 180;
 
-        var posX = this.rotPos.x + this.rotDis * Math.sin(rot);
-        var posY = this.rotPos.y + this.rotDis * Math.cos(rot);
+        var posX = this.rotPos.x + this.rotDis * Math.cos(hudu);
+        var posY = this.rotPos.y + this.rotDis * Math.sin(hudu);
+
+        cc.log(posX, posY);
         this.mainNode.setPosition(posX, posY);
 
         if (isStart)
