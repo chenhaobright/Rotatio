@@ -31,15 +31,13 @@ var GameLayer = cc.Layer.extend({
         this.revolutionSpeed = 36;
 
         // 是否长按
-        isLongPress = false;
+        this.isLongPress = false;
 
         // 游戏是否开始
-        isStart = false;
+        this.isStart = false;
 
         this.isCollision = false;
         this.isPass = false;
-
-        this.rotNum = 0;
     },
 
     // 新的公转旋转点位置
@@ -69,7 +67,7 @@ var GameLayer = cc.Layer.extend({
         // 显示主节点，即玩家操作的节点
         this.mainNode = new MainNode();
         this.mainNode.setPosition(size.width / 2, size.height / 2);
-        this.mainNode.setRotation(180);
+        this.mainNode.setRotation(this.mainNode.getRotation() + 180 * this.rotDir);
         this.mainNode.init();
         this.addChild(this.mainNode);
 
@@ -90,16 +88,28 @@ var GameLayer = cc.Layer.extend({
     // 初始化触摸事件
     initTouch:function ()
     {
+        var self = this;
         this.touchListener = cc.EventListener.create({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
             swallowTouches: true,
             onTouchBegan: function (touch, event) {
-                isStart = true;
-                isLongPress = true;
+                self.isStart = true;
+                self.isLongPress = true;
+                self.rotDir = -1;
+
+                self.mainNode.setRotation(self.mainNode.getRotation() + 180 * self.rotDir);
+
+                self.updateRotPos();
+
                 return true;
             },
             onTouchEnded: function (touch, event) {
-                isLongPress = false;
+                self.isLongPress = false;
+                self.rotDir = 1;
+
+                self.mainNode.setRotation(self.mainNode.getRotation() + 180 * self.rotDir);
+
+                self.updateRotPos();
             },
         });
 
@@ -110,42 +120,28 @@ var GameLayer = cc.Layer.extend({
     update:function (ts)
     {
         // 更新主节点
-        //this.mainNode.update(ts, isStart, isLongPress);
-
-        if(isLongPress)
-        {
-
-        }
+        //this.mainNode.update(ts, this.isStart, this.isLongPress);
 
         // 主节点公转
         var angel = ts * this.revolutionSpeed * this.rotDir;
-        this.rotNum = this.rotNum + angel
-        var rot = this.mainNode.getRotation() + angel
+        var rot = this.mainNode.getRotation() + angel;
         this.mainNode.setRotation(rot);
-
-        //cc.log("_________rot", rot, angel, Math.abs(rot / 90), this.rotNum)
-        if (Math.abs(this.rotNum ) / 90 >= 1)
-        {
-            this.updateRotPos();
-            this.rotNum = 0;
-            this.rotDir = this.rotDir * -1;
-        }
 
         var hudu = 3.14 * rot / 180;
 
-        var posX = this.rotPos.x + this.rotDis * Math.cos(hudu) * this.rotDir;
-        var posY = this.rotPos.y + this.rotDis * Math.sin(hudu) * this.rotDir;
+        var posX = this.rotPos.x + this.rotDis * Math.cos(hudu);
+        var posY = this.rotPos.y + this.rotDis * Math.sin(hudu);
 
-        cc.log(posX, posY, hudu, this.rotPos.x, this.rotPos.y);
+        //cc.log(posX, posY, hudu, this.rotPos.x, this.rotPos.y);
 
         this.mainNode.setPosition(posX, posY);
 
-        if (isStart)
+        if (this.isStart)
         {
             this.tapLabel.setVisible(false);
 
             // 更新障碍物
-            this.blockNode.update(ts, isStart);
+            this.blockNode.update(ts, this.isStart);
 
             // 更新主节点状态，查看是否碰撞和通关
             this.updateState(ts);
