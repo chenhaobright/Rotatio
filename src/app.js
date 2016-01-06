@@ -23,12 +23,12 @@ var GameLayer = cc.Layer.extend({
     // 初始化游戏数据
     initData:function()
     {
-        this.rotDis = cc.winSize.width / 10;
-        this.rotPos = cc.p(cc.winSize.width / 2 + this.rotDis , cc.winSize.height / 2);
+        this.rotLen = cc.winSize.height * 0.75 * 0.5;
+        this.rotPos = cc.p(0, 0);
         this.rotDir = 1; // 旋转方向，1表示顺时针， -1表示逆时针
 
         // 每秒公转速度
-        this.revolutionSpeed = 36;
+        this.revolutionSpeed = 54;
 
         // 是否长按
         this.isLongPress = false;
@@ -43,11 +43,20 @@ var GameLayer = cc.Layer.extend({
     // 新的公转旋转点位置
     updateRotPos:function ()
     {
-        cc.log(this.rotPos.x, this.mainNode.getPositionX())
-        cc.log(this.rotPos.y, this.mainNode.getPositionY())
+        var rot = 0;
+        if (this.rotDir == 1)
+        {
+            rot = this.mainNode.getRotation() + 90;
+        }
+        else
+        {
+            rot = this.mainNode.getRotation() - 90;
+        }
 
-        this.rotPos.x = 2 * this.mainNode.getPositionX() - this.rotPos.x;
-        this.rotPos.y = 2 * this.mainNode.getPositionY() - this.rotPos.y;
+        var hudu = 3.14 * rot / 180;
+
+        this.rotPos.x = this.mainNode.getPositionX() + this.rotLen * Math.sin(hudu);
+        this.rotPos.y = this.mainNode.getPositionY() + this.rotLen * Math.cos(hudu);
 
         this.dotNode.setPosition(this.rotPos);
 
@@ -67,7 +76,6 @@ var GameLayer = cc.Layer.extend({
         // 显示主节点，即玩家操作的节点
         this.mainNode = new MainNode();
         this.mainNode.setPosition(size.width / 2, size.height / 2);
-        this.mainNode.setRotation(this.mainNode.getRotation() + 180 * this.rotDir);
         this.mainNode.init();
         this.addChild(this.mainNode);
 
@@ -95,9 +103,9 @@ var GameLayer = cc.Layer.extend({
             onTouchBegan: function (touch, event) {
                 self.isStart = true;
                 self.isLongPress = true;
-                self.rotDir = -1;
+                self.rotDir = 1;
 
-                self.mainNode.setRotation(self.mainNode.getRotation() + 180 * self.rotDir);
+                self.mainNode.showArrow(1);
 
                 self.updateRotPos();
 
@@ -105,9 +113,9 @@ var GameLayer = cc.Layer.extend({
             },
             onTouchEnded: function (touch, event) {
                 self.isLongPress = false;
-                self.rotDir = 1;
+                self.rotDir = -1;
 
-                self.mainNode.setRotation(self.mainNode.getRotation() + 180 * self.rotDir);
+                self.mainNode.showArrow(2);
 
                 self.updateRotPos();
             },
@@ -122,29 +130,37 @@ var GameLayer = cc.Layer.extend({
         // 更新主节点
         //this.mainNode.update(ts, this.isStart, this.isLongPress);
 
-        // 主节点公转
-        var angel = ts * this.revolutionSpeed * this.rotDir;
-        var rot = this.mainNode.getRotation() + angel;
-        this.mainNode.setRotation(rot);
-
-        var hudu = 3.14 * rot / 180;
-
-        var posX = this.rotPos.x + this.rotDis * Math.cos(hudu);
-        var posY = this.rotPos.y + this.rotDis * Math.sin(hudu);
-
-        //cc.log(posX, posY, hudu, this.rotPos.x, this.rotPos.y);
-
-        this.mainNode.setPosition(posX, posY);
+        var angel = ts * this.revolutionSpeed;
+        var rot1 = this.mainNode.getRotation() + angel;
+        this.mainNode.setRotation(rot1);
 
         if (this.isStart)
         {
+            var rot2 = 0;
+
+            if (this.rotDir == 1)
+            {
+                rot2 = this.mainNode.getRotation() - 90;
+            }
+            else
+            {
+                rot2 = this.mainNode.getRotation() + 90;
+            }
+
+            var hudu = 3.14 * rot2 / 180;
+
+            var posX = this.rotPos.x + this.rotLen * Math.sin(hudu);
+            var posY = this.rotPos.y + this.rotLen * Math.cos(hudu);
+
+            this.mainNode.setPosition(posX, posY);
+
             this.tapLabel.setVisible(false);
 
             // 更新障碍物
-            this.blockNode.update(ts, this.isStart);
+            //this.blockNode.update(ts, this.isStart);
 
             // 更新主节点状态，查看是否碰撞和通关
-            this.updateState(ts);
+            //this.updateState(ts);
 
             // 如果发生碰撞
             if (this.isCollision)
