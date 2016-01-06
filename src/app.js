@@ -157,7 +157,7 @@ var GameLayer = cc.Layer.extend({
             this.tapLabel.setVisible(false);
 
             // 更新障碍物
-            //this.blockNode.update(ts, this.isStart);
+            this.blockNode.update(ts);
 
             // 更新主节点状态，查看是否碰撞和通关
             //this.updateState(ts);

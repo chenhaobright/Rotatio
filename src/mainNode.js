@@ -6,15 +6,6 @@ var MainNode = cc.Node.extend({
         this._super();
 
         this.radius = 30;
-
-        // 每秒自转速度
-        this.rotationSpeed = 36;
-
-        // 当前移动了多少像素
-        this.moveDis = 0;
-
-        // 每秒前进多少像素
-        this.moveSpeed = 300;
     },
 
     init:function()
@@ -71,26 +62,4 @@ var MainNode = cc.Node.extend({
         }
     },
 
-    update:function(ts, isStart, isLongPress)
-    {
-        // 自转
-        var angel = ts * this.rotationSpeed;
-        this.setRotation(this.getRotation() + angel);
-
-        if (isStart)
-        {
-            if (isLongPress)
-            {
-                this.moveDis = this.moveDis - this.moveSpeed * ts;
-                this.showArrow(2);
-            }
-            else
-            {
-                this.moveDis = this.moveDis + this.moveSpeed * ts;
-                this.showArrow(1)
-            }
-
-            this.circleNode.setPositionY(this.moveDis);
-        }
-    },
 });
