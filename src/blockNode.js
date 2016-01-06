@@ -1,3 +1,14 @@
+var BLOCK_DIRECT = {
+    TOP:1,
+    BOTTOM:2,
+    LEFT:3,
+    RIGHT:4,
+    LEFT_TOP:5,
+    RIGHT_BOTTOM:6,
+    RIGHT_TOP:7,
+    LEFT_BOTTOM:8,
+}
+
 var BlockNode = cc.Node.extend({
     _lineWidth: 1,
     _drawColor: null,
@@ -23,6 +34,9 @@ var BlockNode = cc.Node.extend({
     init:function()
     {
         this.passType = -1;
+
+        this.passDirect = self.createBlockDirect();
+
         var size = cc.winSize;
         this.setPosition(size.width / 2 + this.passType * this.passLen, 0);
 
@@ -67,11 +81,53 @@ var BlockNode = cc.Node.extend({
         this.blockNode2.addChild(this.blockDot2);
     },
 
+    // 生成阻挡块的方向
+    createBlockDirect:function()
+    {
+        var randomMax = Math.min(Math.ceil(self.passCount / 5) * 2, 8);
+
+        var direct = Math.floor(Math.random() * randomMax +1)
+
+        return direct;
+
+    },
+
     update:function(ts)
     {
         var dis = this.moveSpeed * ts * 0.5;
 
-        this.setPositionY(this.getPositionY() + dis);
+        switch (this.passDirect)
+        {
+            case BLOCK_DIRECT.TOP:
+                this.setPositionY(this.getPositionY() - dis);
+                break;
+            case BLOCK_DIRECT.BOTTOM:
+                this.setPositionY(this.getPositionY() + dis);
+                break;
+            case BLOCK_DIRECT.LEFT:
+                this.setPositionY(this.getPositionX() + dis);
+                break;
+            case BLOCK_DIRECT.RIGHT:
+                this.setPositionY(this.getPositionX() - dis);
+                break;
+            case BLOCK_DIRECT.LEFT_TOP:
+
+                break;
+            case BLOCK_DIRECT.RIGHT_BOTTOM:
+
+                break;
+            case BLOCK_DIRECT.RIGHT_TOP:
+
+                break;
+            case BLOCK_DIRECT.LEFT_BOTTOM:
+
+                break;
+
+            default:
+                cc.log("生成方向出错")
+        }
+
+
     },
 
 });
