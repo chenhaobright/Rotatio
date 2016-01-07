@@ -73,16 +73,18 @@ var GameLayer = cc.Layer.extend({
         this.tapLabel.setPosition(size.width / 2, size.height / 6);
         this.addChild(this.tapLabel, 1);
 
+
+        // 初始化障碍物UI
+        this.blockNode = new BlockNode();
+        this.blockNode.setPosition(cc.winSize.width / 2, 0);
+        this.blockNode.init();
+        this.addChild(this.blockNode);
+
         // 显示主节点，即玩家操作的节点
         this.mainNode = new MainNode();
         this.mainNode.setPosition(size.width / 2, size.height / 2);
         this.mainNode.init();
         this.addChild(this.mainNode);
-
-        // 初始化障碍物UI
-        this.blockNode = new BlockNode();
-        this.blockNode.init();
-        this.addChild(this.blockNode);
 
         this.dotNode = new cc.DrawNode();
         this.dotNode.setPosition(this.rotPos);

@@ -23,7 +23,7 @@ var MainNode = cc.Node.extend({
 
         // 显示旗杆
         this.drawNode = new cc.DrawNode();
-        this.drawNode.drawSegment(cc.p(0, -size.height/2), cc.p(0, size.height/2), 10, cc.color(0,0,255));
+        this.drawNode.drawSegment(cc.p(0, -size.height), cc.p(0, size.height), 10, cc.color(0,0,255));
         this.addChild(this.drawNode);
 
          // 显示圆和箭头

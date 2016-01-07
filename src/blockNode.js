@@ -16,9 +16,9 @@ var BlockNode = cc.Node.extend({
     {
         this._super();
 
-        this.moveSpeed = 300;       // 每秒前进多少像素
+        this.moveSpeed = 1300;       // 每秒前进多少像素
 
-        this.passLen = cc.winSize.width / 6;     // 通过阻挡大门的长度
+        this.passLen = cc.winSize.width / 8;     // 通过阻挡大门的长度
 
         this.passType = 0; // 只有-1，0， 1三种值，-1表示左边，0表示中间，1表示右边
 
@@ -50,7 +50,7 @@ var BlockNode = cc.Node.extend({
 
         // 绘制阻挡直线1
         this.blockLine1 = new cc.DrawNode();
-        this.blockLine1.drawSegment(cc.p(-cc.winSize.width/2, 0), cc.p(-this.blockRadius - 4 ,0), this.blockLen, cc.color(0, 255, 0));
+        this.blockLine1.drawSegment(cc.p(-cc.winSize.width, 0), cc.p(-this.blockRadius - 4 ,0), this.blockLen, cc.color(0, 255, 0));
         this.blockNode1.addChild(this.blockLine1);
 
         //绘制虚心圆1
@@ -93,11 +93,7 @@ var BlockNode = cc.Node.extend({
         var randomMax = Math.min(Math.ceil(this.passCount / 5) * 2, 8);
         this.passDirect = Math.floor(Math.random() * randomMax + 1);
 
-        this.passType = 0;
-
         var angle = Math.atan(this.ratioX / this.ratioY) * 180 / 3.14;
-
-        cc.log(angle);
 
         switch (this.passDirect)
         {
@@ -145,6 +141,20 @@ var BlockNode = cc.Node.extend({
             default:
                 cc.log("生成方向出错1")
         }
+
+        if (this.passDirect <= 4)
+        {
+            this.passType = Math.floor(Math.random() * 100) % 3 - 1;
+        }
+        else
+        {
+            this.passType = 0;
+        }
+
+        cc.log(angle, this.passType);
+
+        this.setPositionX(this.getPositionX() + this.passType * this.passLen);
+
         this.isFinish = false;
         this.passCount = this.passCount + 1;
     },
