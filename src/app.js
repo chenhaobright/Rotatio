@@ -136,7 +136,6 @@ var GameLayer = cc.Layer.extend({
             // 隐藏提示
             this.tapLabel.setVisible(false);
 
-
             // 更新mainNode位置和方向
             var rot2 = 0;
             if (this.rotDir == 1) {
@@ -150,14 +149,11 @@ var GameLayer = cc.Layer.extend({
             var posY = this.rotPos.y + this.rotLen * Math.cos(hudu);
             this.mainNode.setPosition(posX, posY);
 
-
             // 更新障碍物
             this.blockNode.update(ts);
 
-
             // 更新主节点状态，查看是否碰撞和通关
             this.updateState(ts);
-
 
             // 如果发生碰撞
             if (this.isCollision)
@@ -165,7 +161,6 @@ var GameLayer = cc.Layer.extend({
                 this.isCollision = false;
                 //cc.log("不好意思， 碰撞了");
             }
-
 
             // 如果通过障碍物
             if (this.isPass)

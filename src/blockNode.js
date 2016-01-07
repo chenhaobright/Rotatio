@@ -140,17 +140,12 @@ var BlockNode = cc.Node.extend({
                 cc.log("生成方向出错1")
         }
 
-        if (this.passDirect <= 4)
-        {
+        if (this.passDirect <= 4) {
             this.passType = Math.floor(Math.random() * 100) % 3 - 1;
         }
-        else
-        {
+        else {
             this.passType = 0;
         }
-
-        cc.log(angle, this.passType);
-
         this.setPositionX(this.getPositionX() + this.passType * this.passLen);
 
         this.isFinish = false;
