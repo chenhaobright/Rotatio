@@ -76,7 +76,6 @@ var GameLayer = cc.Layer.extend({
 
         // 初始化障碍物UI
         this.blockNode = new BlockNode();
-        this.blockNode.setPosition(cc.winSize.width / 2, 0);
         this.blockNode.init();
         this.addChild(this.blockNode);
 

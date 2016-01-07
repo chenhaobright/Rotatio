@@ -43,6 +43,9 @@ var BlockNode = cc.Node.extend({
 
     init:function()
     {
+        // 设置到屏幕外
+        this.setPosition(-this.blockRadius, -this.blockRadius);
+
         // 阻挡节点1
         this.blockNode1 = new cc.Node();
         this.blockNode1.setPosition(-this.passLen, 0);
@@ -98,23 +101,23 @@ var BlockNode = cc.Node.extend({
         switch (this.passDirect)
         {
             case BLOCK_DIRECT.TOP:
-                this.setPosition(size.width / 2, size.height);
+                this.setPosition(size.width / 2, size.height + this.blockRadius);
                 this.setRotation(0);
 
                 break;
 
             case BLOCK_DIRECT.BOTTOM:
-                this.setPosition(size.width / 2, 0);
+                this.setPosition(size.width / 2, 0 - this.blockRadius);
                 this.setRotation(0);
                 break;
 
             case BLOCK_DIRECT.LEFT:
-                this.setPosition(0, size.height / 2);
+                this.setPosition(0 - this.blockRadius, size.height / 2);
                 this.setRotation(90);
                 break;
 
             case BLOCK_DIRECT.RIGHT:
-                this.setPosition(size.width, size.height / 2);
+                this.setPosition(size.width + this.blockRadius, size.height / 2);
                 this.setRotation(90);
                 break;
 
