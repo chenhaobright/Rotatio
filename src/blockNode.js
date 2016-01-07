@@ -15,11 +15,8 @@ var BlockNode = cc.Node.extend({
     ctor:function()
     {
         this._super();
-        this.radius = 30;
 
-
-        this.moveSpeed = 1300;       // 每秒前进多少像素
-
+        this.moveSpeed = 300;       // 每秒前进多少像素
 
         this.passLen = cc.winSize.width / 6;     // 通过阻挡大门的长度
 
@@ -33,7 +30,8 @@ var BlockNode = cc.Node.extend({
         this.ratioY = 0;
 
         this.isFinish = true;
-        this.blockLen = 10;    // 阻挡直线的宽度
+        this.blockLen = 5;    // 阻挡直线的宽度
+        this.blockRadius = this.blockLen * 3; // 阻挡圆的半径
 
         // 生成斜边方向
         var edge = Math.sqrt(cc.winSize.height * cc.winSize.height + cc.winSize.width * cc.winSize.width);
@@ -52,17 +50,17 @@ var BlockNode = cc.Node.extend({
 
         // 绘制阻挡直线1
         this.blockLine1 = new cc.DrawNode();
-        this.blockLine1.drawSegment(cc.p(-cc.winSize.width/2, 0), cc.p(-this.radius ,0), 10, cc.color(0, 255, 0));
+        this.blockLine1.drawSegment(cc.p(-cc.winSize.width/2, 0), cc.p(-this.blockRadius - 4 ,0), this.blockLen, cc.color(0, 255, 0));
         this.blockNode1.addChild(this.blockLine1);
 
         //绘制虚心圆1
         this.blockCircle1 = new cc.DrawNode();
-        this.blockCircle1.drawCircle(cc.p(0,0), this.radius * 0.8, 360, 360, false, 4, cc.color(0, 255, 0));
+        this.blockCircle1.drawCircle(cc.p(0,0), this.blockRadius, 360, 360, false, 4, cc.color(0, 255, 0));
         this.blockNode1.addChild(this.blockCircle1);
 
         // 绘制实心圆1
         this.blockDot1 = new cc.DrawNode();
-        this.blockDot1.drawDot(cc.p(0, 0), 15, cc.color(0, 255, 0));
+        this.blockDot1.drawDot(cc.p(0, 0), this.blockRadius / 2, cc.color(0, 255, 0));
         this.blockNode1.addChild(this.blockDot1);
 
         // 阻挡节点2
@@ -72,17 +70,17 @@ var BlockNode = cc.Node.extend({
 
         // 绘制阻挡直线2
         this.blockLine2 = new cc.DrawNode();
-        this.blockLine2.drawSegment(cc.p(this.radius, 0), cc.p(cc.winSize.width ,0), 10, cc.color(0, 255, 0));
+        this.blockLine2.drawSegment(cc.p(this.blockRadius + 4, 0), cc.p(cc.winSize.width ,0), this.blockLen, cc.color(0, 255, 0));
         this.blockNode2.addChild(this.blockLine2);
 
         //绘制虚心圆2
         this.blockCircle2 = new cc.DrawNode();
-        this.blockCircle2.drawCircle(cc.p(0,0), this.radius * 0.8, 360, 360, false, 4, cc.color(0, 255, 0));
+        this.blockCircle2.drawCircle(cc.p(0,0), this.blockRadius, 360, 360, false, 4, cc.color(0, 255, 0));
         this.blockNode2.addChild(this.blockCircle2);
 
         // 绘制实心圆2
         this.blockDot2 = new cc.DrawNode();
-        this.blockDot2.drawDot(cc.p(0, 0), 15, cc.color(0, 255, 0));
+        this.blockDot2.drawDot(cc.p(0, 0), this.blockRadius / 2, cc.color(0, 255, 0));
         this.blockNode2.addChild(this.blockDot2);
     },
 
@@ -97,49 +95,51 @@ var BlockNode = cc.Node.extend({
 
         this.passType = 0;
 
-        //this.blockNode1.setPosition(-this.passLen, 0);
-        //this.blockLine1.drawSegment(cc.p(-cc.winSize.width/2, 0), cc.p(-this.radius ,0), 10, cc.color(0, 255, 0));
-        //this.blockCircle1.drawCircle(cc.p(0,0), this.radius * 0.8, 360, 360, false, 4, cc.color(0, 255, 0));
-        //this.blockDot1.drawDot(cc.p(0, 0), 15, cc.color(0, 255, 0));
+        var angle = Math.atan(this.ratioX / this.ratioY) * 180 / 3.14;
 
-        //this.blockNode2.setPosition(this.passLen, 0);
-        //this.blockLine2.drawSegment(cc.p(this.radius, 0), cc.p(cc.winSize.width ,0), 10, cc.color(0, 255, 0));
-        //this.blockCircle2.drawCircle(cc.p(0,0), this.radius * 0.8, 360, 360, false, 4, cc.color(0, 255, 0));
-        //this.blockDot2.drawDot(cc.p(0, 0), 15, cc.color(0, 255, 0));
+        cc.log(angle);
 
         switch (this.passDirect)
         {
             case BLOCK_DIRECT.TOP:
                 this.setPosition(size.width / 2, size.height);
+                this.setRotation(0);
 
                 break;
 
             case BLOCK_DIRECT.BOTTOM:
                 this.setPosition(size.width / 2, 0);
+                this.setRotation(0);
                 break;
 
             case BLOCK_DIRECT.LEFT:
                 this.setPosition(0, size.height / 2);
+                this.setRotation(90);
                 break;
 
             case BLOCK_DIRECT.RIGHT:
                 this.setPosition(size.width, size.height / 2);
+                this.setRotation(90);
                 break;
 
             case BLOCK_DIRECT.LEFT_TOP:
                 this.setPosition(0, size.height);
+                this.setRotation(-angle);
                 break;
 
             case BLOCK_DIRECT.RIGHT_BOTTOM:
                 this.setPosition(size.width, 0);
+                this.setRotation(-angle);
                 break;
 
             case BLOCK_DIRECT.RIGHT_TOP:
                 this.setPosition(size.width, size.height);
+                this.setRotation(angle);
                 break;
 
             case BLOCK_DIRECT.LEFT_BOTTOM:
                 this.setPosition(0, 0);
+                this.setRotation(angle);
                 break;
 
             default:
@@ -163,28 +163,28 @@ var BlockNode = cc.Node.extend({
                 var posY = this.getPositionY() - dis;
                 this.setPositionY(posY);
 
-                if (posY + this.blockLen <= 0) {this.isFinish = true;}
+                if (posY + this.blockRadius <= 0) {this.isFinish = true;}
                 break;
 
             case BLOCK_DIRECT.BOTTOM:
                 var posY = this.getPositionY() + dis;
                 this.setPositionY(posY);
 
-                if (posY + this.blockLen >= cc.winSize.height) {this.isFinish = true;}
+                if (posY - this.blockRadius >= cc.winSize.height) {this.isFinish = true;}
                 break;
 
             case BLOCK_DIRECT.LEFT:
                 var posX = this.getPositionX() + dis;
                 this.setPositionX(posX);
 
-                if (posX + this.blockLen >= cc.winSize.width) {this.isFinish = true;}
+                if (posX - this.blockRadius >= cc.winSize.width) {this.isFinish = true;}
                 break;
 
             case BLOCK_DIRECT.RIGHT:
                 var posX = this.getPositionX() - dis;
                 this.setPositionX(posX);
 
-                if (posX <= 0) {this.isFinish = true;}
+                if (posX + this.blockRadius <= 0) {this.isFinish = true;}
                 break;
 
             case BLOCK_DIRECT.LEFT_TOP:
