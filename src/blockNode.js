@@ -17,11 +17,11 @@ var BlockNode = cc.Node.extend({
         this._super();
         this.radius = 30;
 
-        // 每秒前进多少像素
-        this.moveSpeed = 300;
 
-        // 通过阻挡大门的长度
-        this.passLen = cc.winSize.width / 6;
+        this.moveSpeed = 1300;       // 每秒前进多少像素
+
+
+        this.passLen = cc.winSize.width / 6;     // 通过阻挡大门的长度
 
         this.passType = 0; // 只有-1，0， 1三种值，-1表示左边，0表示中间，1表示右边
 
@@ -29,17 +29,22 @@ var BlockNode = cc.Node.extend({
 
         this.passCount = 0; // 通过次数
 
+        this.ratioX = 0;
+        this.ratioY = 0;
+
+        this.isFinish = true;
+        this.blockLen = 10;    // 阻挡直线的宽度
+
+        // 生成斜边方向
+        var edge = Math.sqrt(cc.winSize.height * cc.winSize.height + cc.winSize.width * cc.winSize.width);
+
+        this.ratioX = cc.winSize.width / edge;
+        this.ratioY = cc.winSize.height / edge;
+
     },
 
     init:function()
     {
-        this.passType = -1;
-
-        this.passDirect = self.createBlockDirect();
-
-        var size = cc.winSize;
-        this.setPosition(size.width / 2 + this.passType * this.passLen, 0);
-
         // 阻挡节点1
         this.blockNode1 = new cc.Node();
         this.blockNode1.setPosition(-this.passLen, 0);
@@ -81,50 +86,141 @@ var BlockNode = cc.Node.extend({
         this.blockNode2.addChild(this.blockDot2);
     },
 
-    // 生成阻挡块的方向
-    createBlockDirect:function()
+    // 重新更新阻挡块位置
+    updateBlockNode:function(ts)
     {
-        var randomMax = Math.min(Math.ceil(self.passCount / 5) * 2, 8);
+        var size = cc.winSize;
 
-        var direct = Math.floor(Math.random() * randomMax +1)
+        // 生成阻挡块的方向
+        var randomMax = Math.min(Math.ceil(this.passCount / 5) * 2, 8);
+        this.passDirect = Math.floor(Math.random() * randomMax + 1);
 
-        return direct;
+        this.passType = 0;
 
-    },
+        //this.blockNode1.setPosition(-this.passLen, 0);
+        //this.blockLine1.drawSegment(cc.p(-cc.winSize.width/2, 0), cc.p(-this.radius ,0), 10, cc.color(0, 255, 0));
+        //this.blockCircle1.drawCircle(cc.p(0,0), this.radius * 0.8, 360, 360, false, 4, cc.color(0, 255, 0));
+        //this.blockDot1.drawDot(cc.p(0, 0), 15, cc.color(0, 255, 0));
 
-    update:function(ts)
-    {
-        var dis = this.moveSpeed * ts * 0.5;
+        //this.blockNode2.setPosition(this.passLen, 0);
+        //this.blockLine2.drawSegment(cc.p(this.radius, 0), cc.p(cc.winSize.width ,0), 10, cc.color(0, 255, 0));
+        //this.blockCircle2.drawCircle(cc.p(0,0), this.radius * 0.8, 360, 360, false, 4, cc.color(0, 255, 0));
+        //this.blockDot2.drawDot(cc.p(0, 0), 15, cc.color(0, 255, 0));
 
         switch (this.passDirect)
         {
             case BLOCK_DIRECT.TOP:
-                this.setPositionY(this.getPositionY() - dis);
+                this.setPosition(size.width / 2, size.height);
+
                 break;
+
             case BLOCK_DIRECT.BOTTOM:
-                this.setPositionY(this.getPositionY() + dis);
+                this.setPosition(size.width / 2, 0);
                 break;
+
             case BLOCK_DIRECT.LEFT:
-                this.setPositionY(this.getPositionX() + dis);
+                this.setPosition(0, size.height / 2);
                 break;
+
             case BLOCK_DIRECT.RIGHT:
-                this.setPositionY(this.getPositionX() - dis);
+                this.setPosition(size.width, size.height / 2);
                 break;
+
             case BLOCK_DIRECT.LEFT_TOP:
-
+                this.setPosition(0, size.height);
                 break;
+
             case BLOCK_DIRECT.RIGHT_BOTTOM:
-
+                this.setPosition(size.width, 0);
                 break;
+
             case BLOCK_DIRECT.RIGHT_TOP:
-
+                this.setPosition(size.width, size.height);
                 break;
-            case BLOCK_DIRECT.LEFT_BOTTOM:
 
+            case BLOCK_DIRECT.LEFT_BOTTOM:
+                this.setPosition(0, 0);
                 break;
 
             default:
-                cc.log("生成方向出错")
+                cc.log("生成方向出错1")
+        }
+        this.isFinish = false;
+        this.passCount = this.passCount + 1;
+    },
+
+    update:function(ts)
+    {
+        if (this.isFinish)
+        {
+            this.updateBlockNode(ts);
+        }
+
+        var dis = this.moveSpeed * ts * 0.5;
+        switch (this.passDirect)
+        {
+            case BLOCK_DIRECT.TOP:
+                var posY = this.getPositionY() - dis;
+                this.setPositionY(posY);
+
+                if (posY + this.blockLen <= 0) {this.isFinish = true;}
+                break;
+
+            case BLOCK_DIRECT.BOTTOM:
+                var posY = this.getPositionY() + dis;
+                this.setPositionY(posY);
+
+                if (posY + this.blockLen >= cc.winSize.height) {this.isFinish = true;}
+                break;
+
+            case BLOCK_DIRECT.LEFT:
+                var posX = this.getPositionX() + dis;
+                this.setPositionX(posX);
+
+                if (posX + this.blockLen >= cc.winSize.width) {this.isFinish = true;}
+                break;
+
+            case BLOCK_DIRECT.RIGHT:
+                var posX = this.getPositionX() - dis;
+                this.setPositionX(posX);
+
+                if (posX <= 0) {this.isFinish = true;}
+                break;
+
+            case BLOCK_DIRECT.LEFT_TOP:
+                var posX = this.getPositionX() + dis * this.ratioX;
+                var posY = this.getPositionY() - dis * this.ratioY;
+                this.setPosition(posX, posY);
+
+                if (posX >= cc.winSize.width && posY <= 0) {this.isFinish = true;}
+                break;
+
+            case BLOCK_DIRECT.RIGHT_BOTTOM:
+                var posX = this.getPositionX() - dis * this.ratioX;
+                var posY = this.getPositionY() + dis * this.ratioY;
+                this.setPosition(posX, posY);
+
+                if (posX <= 0 && posY >= cc.winSize.height) {this.isFinish = true;}
+                break;
+
+            case BLOCK_DIRECT.RIGHT_TOP:
+                var posX = this.getPositionX() - dis * this.ratioX;
+                var posY = this.getPositionY() - dis * this.ratioY;
+                this.setPosition(posX, posY);
+
+                if (posX <= 0 && posY <= 0) {this.isFinish = true;}
+                break;
+
+            case BLOCK_DIRECT.LEFT_BOTTOM:
+                var posX = this.getPositionX() + dis * this.ratioX;
+                var posY = this.getPositionY() + dis * this.ratioY;
+                this.setPosition(posX, posY);
+
+                if (posX >= cc.winSize.width && posY >= cc.winSize.height) {this.isFinish = true;}
+                break;
+
+            default:
+                cc.log("生成方向出错2")
         }
 
 

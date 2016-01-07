@@ -246,6 +246,7 @@ var GameScene = cc.Scene.extend({
         cc.log(Math.floor(2/5));
         var layer = new GameLayer();
         layer.init();
+
         this.addChild(layer);
     }
 });
