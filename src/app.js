@@ -73,7 +73,6 @@ var GameLayer = cc.Layer.extend({
         this.tapLabel.setPosition(size.width / 2, size.height / 6);
         this.addChild(this.tapLabel, 1);
 
-
         // 初始化障碍物UI
         this.blockNode = new BlockNode();
         this.blockNode.init();
@@ -128,40 +127,37 @@ var GameLayer = cc.Layer.extend({
     // 每帧更新函数
     update:function (ts)
     {
-        // 更新主节点
-        //this.mainNode.update(ts, this.isStart, this.isLongPress);
-
         var angel = ts * this.revolutionSpeed;
         var rot1 = this.mainNode.getRotation() + angel;
         this.mainNode.setRotation(rot1);
 
         if (this.isStart)
         {
-            var rot2 = 0;
+            // 隐藏提示
+            this.tapLabel.setVisible(false);
 
-            if (this.rotDir == 1)
-            {
+
+            // 更新mainNode位置和方向
+            var rot2 = 0;
+            if (this.rotDir == 1) {
                 rot2 = this.mainNode.getRotation() - 90;
             }
-            else
-            {
+            else {
                 rot2 = this.mainNode.getRotation() + 90;
             }
-
             var hudu = 3.14 * rot2 / 180;
-
             var posX = this.rotPos.x + this.rotLen * Math.sin(hudu);
             var posY = this.rotPos.y + this.rotLen * Math.cos(hudu);
-
             this.mainNode.setPosition(posX, posY);
 
-            this.tapLabel.setVisible(false);
 
             // 更新障碍物
             this.blockNode.update(ts);
 
+
             // 更新主节点状态，查看是否碰撞和通关
-            //this.updateState(ts);
+            this.updateState(ts);
+
 
             // 如果发生碰撞
             if (this.isCollision)
@@ -169,6 +165,7 @@ var GameLayer = cc.Layer.extend({
                 this.isCollision = false;
                 //cc.log("不好意思， 碰撞了");
             }
+
 
             // 如果通过障碍物
             if (this.isPass)

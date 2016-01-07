@@ -26,19 +26,15 @@ var BlockNode = cc.Node.extend({
 
         this.passCount = 0; // 通过次数
 
-        this.ratioX = 0;
-        this.ratioY = 0;
-
         this.isFinish = true;
+
         this.blockLen = 5;    // 阻挡直线的宽度
         this.blockRadius = this.blockLen * 3; // 阻挡圆的半径
 
         // 生成斜边方向
         var edge = Math.sqrt(cc.winSize.height * cc.winSize.height + cc.winSize.width * cc.winSize.width);
-
         this.ratioX = cc.winSize.width / edge;
         this.ratioY = cc.winSize.height / edge;
-
     },
 
     init:function()
@@ -103,7 +99,6 @@ var BlockNode = cc.Node.extend({
             case BLOCK_DIRECT.TOP:
                 this.setPosition(size.width / 2, size.height + this.blockRadius);
                 this.setRotation(0);
-
                 break;
 
             case BLOCK_DIRECT.BOTTOM:
