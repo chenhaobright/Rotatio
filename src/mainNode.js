@@ -43,6 +43,11 @@ var MainNode = cc.Node.extend({
          this.circleNode.addChild(this.arrowNode4);
     },
 
+    getRadius:function()
+    {
+        return this.radius;
+    },
+
     showArrow:function(num)
     {
         // 显示箭头， 1是正方向， 2是反方向

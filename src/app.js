@@ -178,58 +178,39 @@ var GameLayer = cc.Layer.extend({
     {
         var size = cc.winSize;
 
-        var rot = this.mainNode.getRotation();
-        var moveDis = this.mainNode.moveDis;
-        var rad = this.mainNode.radius;
+        var mainPos = this.mainNode.getPosition();
+        var mainRad = this.mainNode.getRadius();
 
-        var posX = size.width  / 2 + moveDis * Math.sin(rot);
-        var posY = size.height / 2 + moveDis * Math.cos(rot);
-
-        // 1、判断是否和边缘碰撞
-        if ((posX - rad <= 0) || (posX + rad >= size.width) || (posY - rad <= 0) || (posY + rad >= size.height))
+        // 1）是否和边框碰撞
+        if ((mainPos.x - mainRad <= 0) ||
+            (mainPos.x + mainRad >= size.width) ||
+            (mainPos.y - mainRad <= 0) ||
+            (mainPos.y + mainRad >= size.height))
         {
-            //cc.log("collison1");
+            cc.log("和边框碰撞");
             this.isCollision = true;
+            this.isPass = false;
             return;
         }
 
-        // 2、判断是否和障碍物碰撞
-        // 2.1 先判断是否和阻挡圆碰撞
-        var blockRad = rad * 0.8 + 4;
-        var blockPosY = this.blockNode.getPositionY();
-        var blockPos1 = cc.p(size.width / 2 - size.width / 8, blockPosY);
-        var blockPos2 = cc.p(size.width / 2 + size.width / 8, blockPosY);
-
-        if (this.square(blockPos1.x - posX) + this.square(blockPos1.y - posY) <= this.square(rad + blockRad) ||
-            this.square(blockPos2.x - posX) + this.square(blockPos2.y - posY) <= this.square(rad + blockRad))
+        // 2） 是否和障碍物碰撞
+        if (this.blockNode.checkCollision(mainPos, mainRad))
         {
+            cc.log("和障碍物碰撞");
             this.isCollision = true;
-            return ;
+            this.isPass = false;
+            return;
         }
 
-        // 2.2 再判断是否和阻挡杆碰撞
-        if (posY - rad <= blockPosY)
+        // 3)是否通过障碍物
+        if(this.blockNode.checkPass(mainPos, mainRad))
         {
-            if (posX + rad <= size.width / 2 + size.width / 4 && posX - rad >= size.width / 2 - size.width / 4)
-            {
-                this.isPass = true;
-                //cc.log("isPass", true);
-                return;
-            }
-            else
-            {
-                this.isCollision = true;
-                //cc.log("isCollision", true);
-                return ;
-            }
+            cc.log("通过障碍物");
+            this.isCollision = false;
+            this.isPass = true;
+            return;
         }
-
     },
-
-    square:function(value)
-    {
-        return value * value;
-    }
 
 });
 

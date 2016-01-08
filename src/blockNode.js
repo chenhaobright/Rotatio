@@ -16,7 +16,7 @@ var BlockNode = cc.Node.extend({
     {
         this._super();
 
-        this.moveSpeed = 1300;       // 每秒前进多少像素
+        this.moveSpeed = 500;       // 每秒前进多少像素
 
         this.passLen = cc.winSize.width / 8;     // 通过阻挡大门的长度
 
@@ -90,7 +90,7 @@ var BlockNode = cc.Node.extend({
 
         // 生成阻挡块的方向
         var randomMax = Math.min(Math.ceil(this.passCount / 5) * 2, 8);
-        this.passDirect = Math.floor(Math.random() * randomMax + 1);
+        this.passDirect =4;//Math.floor(Math.random() * randomMax + 1);
 
         var angle = Math.atan(this.ratioX / this.ratioY) * 180 / 3.14;
 
@@ -225,8 +225,130 @@ var BlockNode = cc.Node.extend({
             default:
                 cc.log("生成方向出错2")
         }
+    },
 
+    // 检测输入圆是否碰撞
+    checkCollision:function(pos, rad)
+    {
+        var isCollison = false;
+
+        var hudu = 3.14 * this.getRotation() / 180;
+
+        // 1, 是否和两个阻挡圆碰撞
+        var cirPos1 = this.getPosition();       // 随意赋两个初值，其实没什么卵用
+        var cirPos2 = this.getPosition();
+        cirPos1.x = cirPos1.x + this.blockNode1.getPositionX() * Math.cos(hudu);
+        cirPos1.y = cirPos1.y + this.blockNode1.getPositionX() * Math.sin(hudu);
+        cirPos2.x = cirPos2.x + this.blockNode2.getPositionX() * Math.cos(hudu);
+        cirPos2.y = cirPos2.y + this.blockNode2.getPositionX() * Math.sin(hudu);
+
+        //switch (this.passDirect)
+        //{
+        //    case BLOCK_DIRECT.TOP:
+        //        cirPos1.x = cirPos1.x + this.blockNode1.getPositionX();
+        //        cirPos1.y = cirPos1.y + this.blockNode1.getPositionY();
+        //        cirPos2.x = cirPos2.x + this.blockNode2.getPositionX();
+        //        cirPos2.y = cirPos2.y + this.blockNode2.getPositionY();
+        //        break;
+        //
+        //    case BLOCK_DIRECT.BOTTOM:
+        //        cirPos1.x = cirPos1.x + this.blockNode1.getPositionX();
+        //        cirPos1.y = cirPos1.y + this.blockNode1.getPositionY();
+        //        cirPos2.x = cirPos2.x + this.blockNode2.getPositionX();
+        //        cirPos2.y = cirPos2.y + this.blockNode2.getPositionY();
+        //        break;
+        //
+        //    case BLOCK_DIRECT.LEFT:
+        //        cirPos1.x = cirPos1.x + this.blockNode1.getPositionY();
+        //        cirPos1.y = cirPos1.y + this.blockNode1.getPositionX();
+        //        cirPos2.x = cirPos2.x + this.blockNode2.getPositionY();
+        //        cirPos2.y = cirPos2.y + this.blockNode2.getPositionX();
+        //        break;
+        //
+        //    case BLOCK_DIRECT.RIGHT:
+        //        cirPos1.x = cirPos1.x + this.blockNode1.getPositionY();
+        //        cirPos1.y = cirPos1.y + this.blockNode1.getPositionX();
+        //        cirPos2.x = cirPos2.x + this.blockNode2.getPositionY();
+        //        cirPos2.y = cirPos2.y + this.blockNode2.getPositionX();
+        //        break;
+        //
+        //    case BLOCK_DIRECT.LEFT_TOP:
+        //        break;
+        //
+        //    case BLOCK_DIRECT.RIGHT_BOTTOM:
+        //        break;
+        //
+        //    case BLOCK_DIRECT.RIGHT_TOP:
+        //        break;
+        //
+        //    case BLOCK_DIRECT.LEFT_BOTTOM:
+        //        break;
+        //
+        //    default:
+        //        cc.log("生成方向出错2")
+        //}
+
+        // 判断两圆是否相交
+        if(this.square(pos.x - cirPos1.x) + this.square(pos.y - cirPos1.y) <= this.square(rad + this.blockRadius) ||
+            this.square(pos.x - cirPos2.x) + this.square(pos.y - cirPos2.y) <= this.square(rad + this.blockRadius))
+        {
+            isCollison = true;
+            return isCollison;
+        }
 
     },
+
+    // 检测是否通过障碍物
+    checkPass:function(pos, rad)
+    {
+        var isPass = false;
+
+        var blockPos = this.getPosition();
+
+        switch (this.passDirect)
+        {
+            case BLOCK_DIRECT.TOP:
+                if (pos.y > blockPos.y) {isPass = true;}
+                break;
+
+            case BLOCK_DIRECT.BOTTOM:
+                if (pos.y < blockPos.y) {isPass = true;}
+                break;
+
+            case BLOCK_DIRECT.LEFT:
+                if (pos.x < blockPos.x) {isPass = true;}
+                break;
+
+            case BLOCK_DIRECT.RIGHT:
+                if (pos.x > blockPos.x) {isPass = true;}
+                break;
+
+            case BLOCK_DIRECT.LEFT_TOP:
+                if (pos.x < blockPos.x && pos.y > blockPos.y) {isPass = true;}
+                break;
+
+            case BLOCK_DIRECT.RIGHT_BOTTOM:
+                if (pos.x > blockPos.x && pos.y < blockPos.y) {isPass = true;}
+                break;
+
+            case BLOCK_DIRECT.RIGHT_TOP:
+                if (pos.x > blockPos.x && pos.y > blockPos.y) {isPass = true;}
+                break;
+
+            case BLOCK_DIRECT.LEFT_BOTTOM:
+                if (pos.x < blockPos.x && pos.y < blockPos.y) {isPass = true;}
+                break;
+
+            default:
+                cc.log("生成方向出错2")
+        }
+
+        return isPass;
+    },
+
+    square:function(value)
+    {
+        return value * value;
+    }
 
 });
