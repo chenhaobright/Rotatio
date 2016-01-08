@@ -24,7 +24,7 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-23.233334">
+            <state vertical-scroll-proportion="-49.7">
               <caret line="192" column="19" selection-start-line="192" selection-start-column="19" selection-end-line="192" selection-end-column="19" />
               <folding />
             </state>
@@ -47,14 +47,25 @@
       <file leaf-file-name="blockNode.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/blockNode.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.1573499">
-              <caret line="235" column="0" selection-start-line="235" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.4399586">
+              <caret line="288" column="11" selection-start-line="288" selection-start-column="11" selection-end-line="288" selection-end-column="11" />
               <folding>
-                <element signature="e#922#2666#0" expanded="false" />
+                <element signature="e#2723#4764#0" expanded="false" />
                 <element signature="e#4795#7324#0" expanded="false" />
                 <element signature="e#4936#7318#0" expanded="false" />
-                <element signature="e#7941#7967#0" expanded="false" />
+                <element signature="e#7940#7966#0" expanded="false" />
+                <element signature="e#10309#11571#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CCGeometry.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/frameworks/cocos2d-html5/cocos2d/core/cocoa/CCGeometry.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="133" column="0" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -250,7 +261,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1134" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1134" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17708333" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -301,26 +312,16 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/mainNode.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="79" column="13" selection-start-line="79" selection-start-column="13" selection-end-line="79" selection-end-column="13" />
-          <folding>
-            <element signature="e#181#1674#0" expanded="false" />
-            <element signature="e#1776#2260#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/blockNode.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="43" column="17" selection-start-line="43" selection-start-column="17" selection-end-line="43" selection-end-column="17" />
           <folding>
-            <element signature="e#922#2666#0" expanded="false" />
+            <element signature="e#2723#4764#0" expanded="false" />
             <element signature="e#4795#7324#0" expanded="false" />
             <element signature="e#4936#7318#0" expanded="false" />
-            <element signature="e#7941#7967#0" expanded="false" />
+            <element signature="e#7940#7966#0" expanded="false" />
+            <element signature="e#10309#11571#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -349,10 +350,11 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="43" column="17" selection-start-line="43" selection-start-column="17" selection-end-line="43" selection-end-column="17" />
           <folding>
-            <element signature="e#922#2666#0" expanded="false" />
+            <element signature="e#2723#4764#0" expanded="false" />
             <element signature="e#4795#7324#0" expanded="false" />
             <element signature="e#4936#7318#0" expanded="false" />
-            <element signature="e#7941#7967#0" expanded="false" />
+            <element signature="e#7940#7966#0" expanded="false" />
+            <element signature="e#10309#11571#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -381,10 +383,11 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="43" column="17" selection-start-line="43" selection-start-column="17" selection-end-line="43" selection-end-column="17" />
           <folding>
-            <element signature="e#922#2666#0" expanded="false" />
+            <element signature="e#2723#4764#0" expanded="false" />
             <element signature="e#4795#7324#0" expanded="false" />
             <element signature="e#4936#7318#0" expanded="false" />
-            <element signature="e#7941#7967#0" expanded="false" />
+            <element signature="e#7940#7966#0" expanded="false" />
+            <element signature="e#10309#11571#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -413,10 +416,11 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="43" column="17" selection-start-line="43" selection-start-column="17" selection-end-line="43" selection-end-column="17" />
           <folding>
-            <element signature="e#922#2666#0" expanded="false" />
+            <element signature="e#2723#4764#0" expanded="false" />
             <element signature="e#4795#7324#0" expanded="false" />
             <element signature="e#4936#7318#0" expanded="false" />
-            <element signature="e#7941#7967#0" expanded="false" />
+            <element signature="e#7940#7966#0" expanded="false" />
+            <element signature="e#10309#11571#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -445,10 +449,11 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="43" column="17" selection-start-line="43" selection-start-column="17" selection-end-line="43" selection-end-column="17" />
           <folding>
-            <element signature="e#922#2666#0" expanded="false" />
+            <element signature="e#2723#4764#0" expanded="false" />
             <element signature="e#4795#7324#0" expanded="false" />
             <element signature="e#4936#7318#0" expanded="false" />
-            <element signature="e#7941#7967#0" expanded="false" />
+            <element signature="e#7940#7966#0" expanded="false" />
+            <element signature="e#10309#11571#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -477,10 +482,11 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="24" column="25" selection-start-line="24" selection-start-column="25" selection-end-line="24" selection-end-column="25" />
           <folding>
-            <element signature="e#922#2666#0" expanded="false" />
+            <element signature="e#2723#4764#0" expanded="false" />
             <element signature="e#4795#7324#0" expanded="false" />
             <element signature="e#4936#7318#0" expanded="false" />
-            <element signature="e#7941#7967#0" expanded="false" />
+            <element signature="e#7940#7966#0" expanded="false" />
+            <element signature="e#10309#11571#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -537,10 +543,11 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#922#2666#0" expanded="false" />
+            <element signature="e#2723#4764#0" expanded="false" />
             <element signature="e#4795#7324#0" expanded="false" />
             <element signature="e#4936#7318#0" expanded="false" />
-            <element signature="e#7941#7967#0" expanded="false" />
+            <element signature="e#7940#7966#0" expanded="false" />
+            <element signature="e#10309#11571#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -619,10 +626,11 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="18" column="52" selection-start-line="18" selection-start-column="45" selection-end-line="18" selection-end-column="52" />
           <folding>
-            <element signature="e#922#2666#0" expanded="false" />
+            <element signature="e#2723#4764#0" expanded="false" />
             <element signature="e#4795#7324#0" expanded="false" />
             <element signature="e#4936#7318#0" expanded="false" />
-            <element signature="e#7941#7967#0" expanded="false" />
+            <element signature="e#7940#7966#0" expanded="false" />
+            <element signature="e#10309#11571#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -707,10 +715,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/resource.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/mainNode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-15.0">
+          <caret line="50" column="6" selection-start-line="50" selection-start-column="5" selection-end-line="50" selection-end-column="6" />
+          <folding>
+            <element signature="e#181#1674#0" expanded="false" />
+            <element signature="e#1776#2260#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-49.7">
+          <caret line="192" column="19" selection-start-line="192" selection-start-column="19" selection-end-line="192" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/EcmaScript.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.43373495">
+          <caret line="435" column="7" selection-start-line="435" selection-start-column="7" selection-end-line="435" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/script/jsb_cocos2d.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.15963855">
-          <caret line="360" column="3" selection-start-line="360" selection-start-column="3" selection-end-line="360" selection-end-column="3" />
+        <state vertical-scroll-proportion="0.43373495">
+          <caret line="1897" column="47" selection-start-line="1897" selection-start-column="43" selection-end-line="1897" selection-end-column="47" />
           <folding>
             <element signature="e#1136#1138#0" expanded="false" />
             <element signature="e#1164#1178#0" expanded="false" />
@@ -976,7 +1018,6 @@
             <element signature="e#46429#46431#0" expanded="false" />
             <element signature="e#46523#47113#0" expanded="false" />
             <element signature="e#47232#47344#0" expanded="false" />
-            <element signature="e#47379#52454#0" expanded="false" />
             <element signature="e#47482#47522#0" expanded="false" />
             <element signature="e#47555#47594#0" expanded="false" />
             <element signature="e#47631#47844#0" expanded="false" />
@@ -993,7 +1034,6 @@
             <element signature="e#50773#50839#0" expanded="false" />
             <element signature="e#50845#50948#0" expanded="false" />
             <element signature="e#51622#51742#0" expanded="false" />
-            <element signature="e#51835#51925#0" expanded="false" />
             <element signature="e#51995#52452#0" expanded="false" />
             <element signature="e#52187#52446#0" expanded="false" />
             <element signature="e#52490#52523#0" expanded="false" />
@@ -1156,48 +1196,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/EcmaScript.js">
+    <entry file="file://$PROJECT_DIR$/frameworks/cocos2d-html5/cocos2d/core/cocoa/CCGeometry.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="584" column="17" selection-start-line="584" selection-start-column="17" selection-end-line="584" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/resource.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/mainNode.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-15.0">
-          <caret line="50" column="6" selection-start-line="50" selection-start-column="5" selection-end-line="50" selection-end-column="6" />
-          <folding>
-            <element signature="e#181#1674#0" expanded="false" />
-            <element signature="e#1776#2260#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-23.233334">
-          <caret line="192" column="19" selection-start-line="192" selection-start-column="19" selection-end-line="192" selection-end-column="19" />
+          <caret line="133" column="0" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/blockNode.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.1573499">
-          <caret line="235" column="0" selection-start-line="235" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.4399586">
+          <caret line="288" column="11" selection-start-line="288" selection-start-column="11" selection-end-line="288" selection-end-column="11" />
           <folding>
-            <element signature="e#922#2666#0" expanded="false" />
+            <element signature="e#2723#4764#0" expanded="false" />
             <element signature="e#4795#7324#0" expanded="false" />
             <element signature="e#4936#7318#0" expanded="false" />
-            <element signature="e#7941#7967#0" expanded="false" />
+            <element signature="e#7940#7966#0" expanded="false" />
+            <element signature="e#10309#11571#0" expanded="false" />
           </folding>
         </state>
       </provider>

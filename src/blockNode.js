@@ -235,12 +235,12 @@ var BlockNode = cc.Node.extend({
         var hudu = 3.14 * this.getRotation() / 180;
 
         // 1, 是否和两个阻挡圆碰撞
-        var cirPos1 = this.getPosition();       // 随意赋两个初值，其实没什么卵用
-        var cirPos2 = this.getPosition();
-        cirPos1.x = cirPos1.x + this.blockNode1.getPositionX() * Math.cos(hudu);
-        cirPos1.y = cirPos1.y + this.blockNode1.getPositionX() * Math.sin(hudu);
-        cirPos2.x = cirPos2.x + this.blockNode2.getPositionX() * Math.cos(hudu);
-        cirPos2.y = cirPos2.y + this.blockNode2.getPositionX() * Math.sin(hudu);
+        var cirPos1 = cc.p(0, 0);
+        var cirPos2 = cc.p(0, 0);
+        cirPos1.x = this.getPositionX() + this.blockNode1.getPositionX() * Math.cos(hudu);
+        cirPos1.y = this.getPositionY() + this.blockNode1.getPositionX() * Math.sin(hudu);
+        cirPos2.x = this.getPositionX() + this.blockNode2.getPositionX() * Math.cos(hudu);
+        cirPos2.y = this.getPositionY() + this.blockNode2.getPositionX() * Math.sin(hudu);
 
         //switch (this.passDirect)
         //{
@@ -295,6 +295,11 @@ var BlockNode = cc.Node.extend({
             isCollison = true;
             return isCollison;
         }
+
+        // 2，是否和矩形框碰撞
+        var rotPos = cc.p(0, 0);
+
+
 
     },
 
