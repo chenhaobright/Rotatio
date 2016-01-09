@@ -28,7 +28,7 @@ var GameLayer = cc.Layer.extend({
         this.rotDir = 1; // 旋转方向，1表示顺时针， -1表示逆时针
 
         // 每秒公转速度
-        this.revolutionSpeed = 54;
+        this.revolutionSpeed = 5.4;
 
         // 是否长按
         this.isLongPress = false;
@@ -86,7 +86,7 @@ var GameLayer = cc.Layer.extend({
 
         this.dotNode = new cc.DrawNode();
         this.dotNode.setPosition(this.rotPos);
-        this.dotNode.drawDot(cc.p(0, 0), 10, cc.color(255, 255, 255));
+        this.dotNode.drawDot(cc.p(0, 0), 1, cc.color(255, 255, 255));
         this.addChild(this.dotNode);
 
 
@@ -187,7 +187,7 @@ var GameLayer = cc.Layer.extend({
             (mainPos.y - mainRad <= 0) ||
             (mainPos.y + mainRad >= size.height))
         {
-            cc.log("和边框碰撞");
+            //cc.log("和边框碰撞");
             this.isCollision = true;
             this.isPass = false;
             return;
@@ -196,7 +196,7 @@ var GameLayer = cc.Layer.extend({
         // 2） 是否和障碍物碰撞
         if (this.blockNode.checkCollision(mainPos, mainRad))
         {
-            cc.log("和障碍物碰撞");
+            //cc.log("和障碍物碰撞");
             this.isCollision = true;
             this.isPass = false;
             return;
@@ -205,7 +205,7 @@ var GameLayer = cc.Layer.extend({
         // 3)是否通过障碍物
         if(this.blockNode.checkPass(mainPos, mainRad))
         {
-            cc.log("通过障碍物");
+            //cc.log("通过障碍物");
             this.isCollision = false;
             this.isPass = true;
             return;

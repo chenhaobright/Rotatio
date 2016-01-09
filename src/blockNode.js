@@ -16,7 +16,7 @@ var BlockNode = cc.Node.extend({
     {
         this._super();
 
-        this.moveSpeed = 500;       // 每秒前进多少像素
+        this.moveSpeed = 50;       // 每秒前进多少像素
 
         this.passLen = cc.winSize.width / 8;     // 通过阻挡大门的长度
 
@@ -28,7 +28,7 @@ var BlockNode = cc.Node.extend({
 
         this.isFinish = true;
 
-        this.blockLen = 5;    // 阻挡直线的宽度
+        this.blockLen = 1;    // 阻挡直线的宽度
         this.blockRadius = this.blockLen * 3; // 阻挡圆的半径
 
         // 生成斜边方向
@@ -90,7 +90,7 @@ var BlockNode = cc.Node.extend({
 
         // 生成阻挡块的方向
         var randomMax = Math.min(Math.ceil(this.passCount / 5) * 2, 8);
-        this.passDirect =4;//Math.floor(Math.random() * randomMax + 1);
+        this.passDirect =5;//Math.floor(Math.random() * randomMax + 1);
 
         var angle = Math.atan(this.ratioX / this.ratioY) * 180 / 3.14;
 
@@ -242,63 +242,29 @@ var BlockNode = cc.Node.extend({
         cirPos2.x = this.getPositionX() + this.blockNode2.getPositionX() * Math.cos(hudu);
         cirPos2.y = this.getPositionY() + this.blockNode2.getPositionX() * Math.sin(hudu);
 
-        //switch (this.passDirect)
-        //{
-        //    case BLOCK_DIRECT.TOP:
-        //        cirPos1.x = cirPos1.x + this.blockNode1.getPositionX();
-        //        cirPos1.y = cirPos1.y + this.blockNode1.getPositionY();
-        //        cirPos2.x = cirPos2.x + this.blockNode2.getPositionX();
-        //        cirPos2.y = cirPos2.y + this.blockNode2.getPositionY();
-        //        break;
-        //
-        //    case BLOCK_DIRECT.BOTTOM:
-        //        cirPos1.x = cirPos1.x + this.blockNode1.getPositionX();
-        //        cirPos1.y = cirPos1.y + this.blockNode1.getPositionY();
-        //        cirPos2.x = cirPos2.x + this.blockNode2.getPositionX();
-        //        cirPos2.y = cirPos2.y + this.blockNode2.getPositionY();
-        //        break;
-        //
-        //    case BLOCK_DIRECT.LEFT:
-        //        cirPos1.x = cirPos1.x + this.blockNode1.getPositionY();
-        //        cirPos1.y = cirPos1.y + this.blockNode1.getPositionX();
-        //        cirPos2.x = cirPos2.x + this.blockNode2.getPositionY();
-        //        cirPos2.y = cirPos2.y + this.blockNode2.getPositionX();
-        //        break;
-        //
-        //    case BLOCK_DIRECT.RIGHT:
-        //        cirPos1.x = cirPos1.x + this.blockNode1.getPositionY();
-        //        cirPos1.y = cirPos1.y + this.blockNode1.getPositionX();
-        //        cirPos2.x = cirPos2.x + this.blockNode2.getPositionY();
-        //        cirPos2.y = cirPos2.y + this.blockNode2.getPositionX();
-        //        break;
-        //
-        //    case BLOCK_DIRECT.LEFT_TOP:
-        //        break;
-        //
-        //    case BLOCK_DIRECT.RIGHT_BOTTOM:
-        //        break;
-        //
-        //    case BLOCK_DIRECT.RIGHT_TOP:
-        //        break;
-        //
-        //    case BLOCK_DIRECT.LEFT_BOTTOM:
-        //        break;
-        //
-        //    default:
-        //        cc.log("生成方向出错2")
-        //}
-
         // 判断两圆是否相交
         if(this.square(pos.x - cirPos1.x) + this.square(pos.y - cirPos1.y) <= this.square(rad + this.blockRadius) ||
             this.square(pos.x - cirPos2.x) + this.square(pos.y - cirPos2.y) <= this.square(rad + this.blockRadius))
         {
+            cc.log("和圆碰撞");
             isCollison = true;
             return isCollison;
         }
 
         // 2，是否和矩形框碰撞
-        var rotPos = cc.p(0, 0);
+        var linePos = this.getPosition();
+        var rot = this.getRotation();
+        var d = this.getPointToLineDistance(pos, linePos, rot);
 
+
+        if (d <= this.blockLen + rad)
+        {
+
+            cc.log(this.blockLen, rad, d, rot);
+            cc.log("和矩形框碰撞");
+            isCollison = true;
+            return isCollison;
+        }
 
 
     },
@@ -354,6 +320,36 @@ var BlockNode = cc.Node.extend({
     square:function(value)
     {
         return value * value;
+    },
+
+    // 得到点到直线的距离, 直线用一个点和旋转角度表示
+    getPointToLineDistance:function(cirPos, linePos, rotation)
+    {
+        if (rotation == 90)
+        {
+            //cc.log(cirPos.x, linePos.x);
+            return Math.abs(cirPos.x - linePos.x);
+        }
+        else
+        {
+            //rotation = rotation * -1;
+            // 直线方程 y = kx + b 得到
+            var k = Math.tan(rotation);
+            var b = linePos.y - k * linePos.x;
+
+            // 再由直线方程 Ax + By + C = 0 得到
+            var A = k;
+            var B = -1;
+            var C = b;
+
+            // 再由点到直线方程为: (ax + by + c) / sqrt(a * a + b * b)
+
+            var d = (k * cirPos.x + -1 * cirPos.y + C) / Math.sqrt(A * A + B * B);
+            d = Math.abs(d);
+
+            return d;
+
+        }
     }
 
 });
