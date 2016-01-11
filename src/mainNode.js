@@ -6,6 +6,8 @@ var MainNode = cc.Node.extend({
         this._super();
 
         this.radius = 30;
+
+        this.circleLen = 5;
     },
 
     init:function()
@@ -14,12 +16,12 @@ var MainNode = cc.Node.extend({
 
         // 显示旗杆
         this.drawNode = new cc.DrawNode();
-        this.drawNode.drawSegment(cc.p(0, -size.height), cc.p(0, size.height), 10, cc.color(0,0,255));
+        this.drawNode.drawSegment(cc.p(0, -size.height), cc.p(0, size.height), 5, cc.color(0,0,255));
         this.addChild(this.drawNode);
 
          // 显示圆和箭头
          this.circleNode = new cc.DrawNode();
-         this.circleNode.drawCircle(cc.p(0, 0), this.radius, 360, 360, false, 5, cc.color(255,0,0));
+         this.circleNode.drawCircle(cc.p(0, 0), this.radius, 360, 360, false, this.circleLen, cc.color(255,0,0));
          this.addChild(this.circleNode);
 
          this.arrowNode1 = new cc.DrawNode();

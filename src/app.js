@@ -28,7 +28,7 @@ var GameLayer = cc.Layer.extend({
         this.rotDir = 1; // 旋转方向，1表示顺时针， -1表示逆时针
 
         // 每秒公转速度
-        this.revolutionSpeed = 5.4;
+        this.revolutionSpeed = 54;
 
         // 是否长按
         this.isLongPress = false;
