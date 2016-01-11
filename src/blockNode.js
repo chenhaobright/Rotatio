@@ -28,7 +28,7 @@ var BlockNode = cc.Node.extend({
 
         this.isFinish = true;
 
-        this.blockLen = 1;    // 阻挡直线的宽度
+        this.blockLen = 4;    // 阻挡直线的宽度
         this.blockRadius = this.blockLen * 3; // 阻挡圆的半径
 
         // 生成斜边方向
@@ -91,7 +91,7 @@ var BlockNode = cc.Node.extend({
 
         // 生成阻挡块的方向
         var randomMax = Math.min(Math.ceil(this.passCount / 5) * 2, 8);
-        this.passDirect = 8;//Math.floor(Math.random() * randomMax + 1);
+        this.passDirect = Math.floor(Math.random() * randomMax + 1);
 
         var angle = Math.atan(this.ratioX / this.ratioY) * 180 / 3.14;
 
@@ -256,8 +256,14 @@ var BlockNode = cc.Node.extend({
         // 2，是否和矩形框碰撞
         var linePos = this.getPosition();
         var rot = this.getRotation();
-        var d = this.getPointToLineDistance(pos, linePos, rot);
-        if (d <= this.blockLen + rad)
+        // 点到直线的距离
+        var lineD = this.getPointToLineDistance(pos, linePos, rot);
+
+        // 点到点的距离
+        var circleD = Math.sqrt(this.square(pos.x - linePos.x) + this.square(pos.y - linePos.y));
+
+        // 当检测点不在通过区,并用到直线距离小于时,碰撞成功
+        if (lineD <= this.blockLen + rad && circleD >= this.passLen - this.blockRadius)
         {
             cc.log("和矩形框碰撞");
             isCollison = true;
@@ -272,6 +278,7 @@ var BlockNode = cc.Node.extend({
         var isPass = false;
 
         var blockPos = this.getPosition();
+
 
         switch (this.passDirect)
         {

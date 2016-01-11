@@ -159,14 +159,13 @@ var GameLayer = cc.Layer.extend({
             if (this.isCollision)
             {
                 this.isCollision = false;
-                //cc.log("不好意思， 碰撞了");
             }
 
             // 如果通过障碍物
             if (this.isPass)
             {
                 this.isPass = false;
-                //cc.log("恭喜你，通过一关");
+                cc.log("通过障碍物");
             }
         }
 
