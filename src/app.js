@@ -27,16 +27,14 @@ var GameLayer = cc.Layer.extend({
         this.rotPos = cc.p(0, 0);
         this.rotDir = 1; // 旋转方向，1表示顺时针， -1表示逆时针
 
-        // 每秒公转速度
-        this.revolutionSpeed = 54;
-
         // 是否长按
         this.isLongPress = false;
 
         // 游戏是否开始
         this.isStart = false;
 
-        this.isCollision = false;
+        this.isOver = false;
+
     },
 
     // 新的公转旋转点位置
@@ -116,9 +114,7 @@ var GameLayer = cc.Layer.extend({
     // 每帧更新函数
     update:function (ts)
     {
-        var angel = ts * this.revolutionSpeed;
-        var rot1 = this.mainNode.getRotation() + angel;
-        this.mainNode.setRotation(rot1);
+        this.mainNode.update(ts, this.isStart, this.isOver);
 
         if (this.isStart)
         {
@@ -126,31 +122,26 @@ var GameLayer = cc.Layer.extend({
             this.tapLabel.setVisible(false);
 
             // 更新mainNode位置和方向
-            var rot2 = this.mainNode.getRotation() - 90 * this.rotDir;
-            var hudu = 3.14 * rot2 / 180;
+            var rot = this.mainNode.getRotation() - 90 * this.rotDir;
+            var hudu = 3.14 * rot / 180;
 
             var posX = this.rotPos.x + this.rotLen * Math.sin(hudu);
             var posY = this.rotPos.y + this.rotLen * Math.cos(hudu);
             this.mainNode.setPosition(posX, posY);
 
             // 更新障碍物
-            this.blockNode.update(ts, this.mainNode.getPosition(), this.mainNode.getRadius());
+            this.blockNode.update(ts, this.isOver, this.mainNode.getPosition(), this.mainNode.getRadius());
 
             // 碰撞逻辑
-            this.collisionLogic(ts);
-
-            // 如果发生碰撞,则游戏失败，弹出UI层，生产随便三角形
-            if (this.isCollision)
-            {
-                cc.log("碰撞了");
-                this.isCollision = false;
-            }
+            this.collisionLogic(ts, this.isOver);
         }
     },
 
     // 碰撞检测,分为和边缘碰撞、障碍物碰撞
-    collisionLogic:function(ts)
+    collisionLogic:function(ts, isOver)
     {
+        if(isOver) {return;}
+
         var size = cc.winSize;
 
         var mainPos = this.mainNode.getPosition();
@@ -163,13 +154,20 @@ var GameLayer = cc.Layer.extend({
             (mainPos.y + mainRad >= size.height))
         {
             //cc.log("和边框碰撞");
-            this.isCollision = true;
+            this.isOver = true;
         }
 
         // 2） 是否和障碍物碰撞
         if (this.blockNode.getIsCollision())
         {
-            this.isCollision = true;
+            this.isOver = true;
+        }
+
+        // 如果发生碰撞,则游戏失败，弹出UI层，生产随便三角形
+        if (this.isOver)
+        {
+            cc.log("碰撞了");
+            this.mainNode.createTriangle();
         }
     },
 

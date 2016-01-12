@@ -9,7 +9,13 @@ var MainNode = cc.Node.extend({
 
         this.circleLen = 5;
 
-        this.isOver = false;
+        // 每秒公转速度
+        this.revolutionSpeed = 54;
+
+        this.smallTriangle = [];
+        this.bigTriangle = [];
+        this.triangleNum = 60;
+        this.speed = 20;
     },
 
     init:function()
@@ -49,13 +55,44 @@ var MainNode = cc.Node.extend({
 
     createTriangle:function()
     {
-        this.isOver = true;
+        // 加载大三角形图片
+        for(i = 0; i < this.triangleNum; i++)
+        {
+            var bigSprite = new cc.Sprite(res.Triangle_png);
+            bigSprite.setPosition(this.getPosition());
+            this.addChild(bigSprite);
 
-        var triangle = {
-            speed:0,
-            rot:0,
-            radius:0
+            var rot = 3.14 * Math.random() * 360 / 180;
+
+            var data = {
+                sprite:bigSprite,
+                speedX:this.speed * Math.sin(rot),
+                speedY:this.speed * Math.cos(rot)
+            }
+            this.bigTriangle[i] = data;
         }
+
+        // 加载小三角形图片
+        for(k = 0; k < this.triangleNum; k++)
+        {
+            var smallSprite = new cc.Sprite(res.Triangle_png);
+            smallSprite.setScale(0.5);
+            var x = this.getPositionX() + cc.winSize.height / (k + 1) * Math.sin(this.getRotation());
+            var y = this.getPositionY() + cc.winSize.height / (k + 1) * Math.cos(this.getRotation());
+            smallSprite.setPosition(cc.p(x, y));
+            this.addChild(smallSprite);
+
+            var rot = 3.14 * Math.random() * 360 / 180;
+
+            var data = {
+                sprite:smallSprite,
+                speedX:this.speed * Math.sin(rot),
+                speedY:this.speed * Math.cos(rot)
+            }
+
+            this.smallTriangle[i] = data;
+        }
+
     },
 
     getRadius:function()
@@ -83,9 +120,18 @@ var MainNode = cc.Node.extend({
     },
 
     // 更新三角形位置
-    update:function(ts)
+    update:function(ts, isStart, isOver)
     {
+        if(isOver)
+        {
 
+        }
+        else
+        {
+            var angel = ts * this.revolutionSpeed;
+            var rot = this.getRotation() + angel;
+            this.setRotation(rot);
+        }
     },
 
 });

@@ -173,13 +173,13 @@ var BlockNode = cc.Node.extend({
         this.isFinish = false;
         this.isPass = false;
         this.isCollision = false;
-        this.passCount = this.passCount + 1;
     },
 
-    update:function(ts, pos, rad)
+    update:function(ts, isOver, pos, rad)
     {
-        if (this.isFinish)
-        {
+        if (isOver) {return;}
+
+        if (this.isFinish) {
             this.updateBlockNode(ts);
         }
 
