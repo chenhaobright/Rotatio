@@ -25,8 +25,9 @@ var BlockNode = cc.Node.extend({
         this.passDirect = 0; // 有8个方向：左、右、上、下、左上、左下、右上、右下
 
         this.passCount = 0; // 通过次数
-
         this.isFinish = true;
+        this.isPass = false;
+        this.isCollision = false;
 
         this.blockLen = 4;    // 阻挡直线的宽度
         this.blockRadius = this.blockLen * 3; // 阻挡圆的半径
@@ -82,6 +83,26 @@ var BlockNode = cc.Node.extend({
         this.blockDot2.drawDot(cc.p(0, 0), this.blockRadius / 2, cc.color(0, 255, 0));
         this.blockNode2.addChild(this.blockDot2);
 
+    },
+
+    getIsFinish:function()
+    {
+        return this.isFinish;
+    },
+
+    getIsPass:function()
+    {
+        return this.isPass;
+    },
+
+    getPassCount:function()
+    {
+        return this.passCount;
+    },
+
+    getIsCollision:function()
+    {
+        return this.isCollision;
     },
 
     // 重新更新阻挡块位置
@@ -150,10 +171,12 @@ var BlockNode = cc.Node.extend({
         this.setPositionX(this.getPositionX() + this.passType * this.passLen);
 
         this.isFinish = false;
+        this.isPass = false;
+        this.isCollision = false;
         this.passCount = this.passCount + 1;
     },
 
-    update:function(ts)
+    update:function(ts, pos, rad)
     {
         if (this.isFinish)
         {
@@ -226,13 +249,14 @@ var BlockNode = cc.Node.extend({
             default:
                 cc.log("生成方向出错2")
         }
+
+        this.checkCollision(pos, rad);
+        this.checkPass(pos, rad);
     },
 
     // 检测输入圆是否碰撞
     checkCollision:function(pos, rad)
     {
-        var isCollison = false;
-
         var hudu = -3.14 * this.getRotation() / 180;
 
         // 1, 是否和两个阻挡圆碰撞
@@ -248,9 +272,9 @@ var BlockNode = cc.Node.extend({
         if(this.square(pos.x - cirPos1.x) + this.square(pos.y - cirPos1.y) <= this.square(rad + this.blockRadius) ||
             this.square(pos.x - cirPos2.x) + this.square(pos.y - cirPos2.y) <= this.square(rad + this.blockRadius))
         {
-            cc.log("和圆碰撞");
-            isCollison = true;
-            return isCollison;
+            //cc.log("和圆碰撞");
+            this.isCollision = true;
+            return;
         }
 
         // 2，是否和矩形框碰撞
@@ -265,9 +289,8 @@ var BlockNode = cc.Node.extend({
         // 当检测点不在通过区,并用到直线距离小于时,碰撞成功
         if (lineD <= this.blockLen + rad && circleD >= this.passLen - this.blockRadius)
         {
-            cc.log("和矩形框碰撞");
-            isCollison = true;
-            return isCollison;
+            //cc.log("和矩形框碰撞");
+            this.isCollision = true;
         }
 
     },
@@ -275,50 +298,54 @@ var BlockNode = cc.Node.extend({
     // 检测是否通过障碍物
     checkPass:function(pos, rad)
     {
-        var isPass = false;
+        if(this.isPass || this.isCollision) {return;}
 
         var blockPos = this.getPosition();
-
 
         switch (this.passDirect)
         {
             case BLOCK_DIRECT.TOP:
-                if (pos.y > blockPos.y) {isPass = true;}
+                if (pos.y > blockPos.y) {this.isPass = true;}
                 break;
 
             case BLOCK_DIRECT.BOTTOM:
-                if (pos.y < blockPos.y) {isPass = true;}
+                if (pos.y < blockPos.y) {this.isPass = true;}
                 break;
 
             case BLOCK_DIRECT.LEFT:
-                if (pos.x < blockPos.x) {isPass = true;}
+                if (pos.x < blockPos.x) {this.isPass = true;}
                 break;
 
             case BLOCK_DIRECT.RIGHT:
-                if (pos.x > blockPos.x) {isPass = true;}
+                if (pos.x > blockPos.x) {this.isPass = true;}
                 break;
 
             case BLOCK_DIRECT.LEFT_TOP:
-                if (pos.x < blockPos.x && pos.y > blockPos.y) {isPass = true;}
+                if (pos.x < blockPos.x && pos.y > blockPos.y) {this.isPass = true;}
                 break;
 
             case BLOCK_DIRECT.RIGHT_BOTTOM:
-                if (pos.x > blockPos.x && pos.y < blockPos.y) {isPass = true;}
+                if (pos.x > blockPos.x && pos.y < blockPos.y) {this.isPass = true;}
                 break;
 
             case BLOCK_DIRECT.RIGHT_TOP:
-                if (pos.x > blockPos.x && pos.y > blockPos.y) {isPass = true;}
+                if (pos.x > blockPos.x && pos.y > blockPos.y) {this.isPass = true;}
                 break;
 
             case BLOCK_DIRECT.LEFT_BOTTOM:
-                if (pos.x < blockPos.x && pos.y < blockPos.y) {isPass = true;}
+                if (pos.x < blockPos.x && pos.y < blockPos.y) {this.isPass = true;}
                 break;
 
             default:
                 cc.log("生成方向出错2")
         }
 
-        return isPass;
+        if(this.isPass)
+        {
+            this.passCount = this.passCount + 1;
+
+            cc.log("通过次数：", this.passCount);
+        }
     },
 
     square:function(value)

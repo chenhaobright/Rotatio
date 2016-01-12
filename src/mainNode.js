@@ -8,6 +8,8 @@ var MainNode = cc.Node.extend({
         this.radius = 30;
 
         this.circleLen = 5;
+
+        this.isOver = false;
     },
 
     init:function()
@@ -45,6 +47,17 @@ var MainNode = cc.Node.extend({
          this.circleNode.addChild(this.arrowNode4);
     },
 
+    createTriangle:function()
+    {
+        this.isOver = true;
+
+        var triangle = {
+            speed:0,
+            rot:0,
+            radius:0
+        }
+    },
+
     getRadius:function()
     {
         return this.radius;
@@ -67,6 +80,12 @@ var MainNode = cc.Node.extend({
             this.arrowNode3.setVisible(true);
             this.arrowNode4.setVisible(true);
         }
+    },
+
+    // 更新三角形位置
+    update:function(ts)
+    {
+
     },
 
 });

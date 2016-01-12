@@ -37,22 +37,12 @@ var GameLayer = cc.Layer.extend({
         this.isStart = false;
 
         this.isCollision = false;
-        this.isPass = false;
     },
 
     // 新的公转旋转点位置
     updateRotPos:function ()
     {
-        var rot = 0;
-        if (this.rotDir == 1)
-        {
-            rot = this.mainNode.getRotation() + 90;
-        }
-        else
-        {
-            rot = this.mainNode.getRotation() - 90;
-        }
-
+        var rot = this.mainNode.getRotation() + 90 * this.rotDir;
         var hudu = 3.14 * rot / 180;
 
         this.rotPos.x = this.mainNode.getPositionX() + this.rotLen * Math.sin(hudu);
@@ -88,7 +78,6 @@ var GameLayer = cc.Layer.extend({
         this.dotNode.setPosition(this.rotPos);
         this.dotNode.drawDot(cc.p(0, 0), 1, cc.color(255, 255, 255));
         this.addChild(this.dotNode);
-
 
         // 显示分数
     },
@@ -137,43 +126,30 @@ var GameLayer = cc.Layer.extend({
             this.tapLabel.setVisible(false);
 
             // 更新mainNode位置和方向
-            var rot2 = 0;
-            if (this.rotDir == 1) {
-                rot2 = this.mainNode.getRotation() - 90;
-            }
-            else {
-                rot2 = this.mainNode.getRotation() + 90;
-            }
+            var rot2 = this.mainNode.getRotation() - 90 * this.rotDir;
             var hudu = 3.14 * rot2 / 180;
+
             var posX = this.rotPos.x + this.rotLen * Math.sin(hudu);
             var posY = this.rotPos.y + this.rotLen * Math.cos(hudu);
             this.mainNode.setPosition(posX, posY);
 
             // 更新障碍物
-            this.blockNode.update(ts);
+            this.blockNode.update(ts, this.mainNode.getPosition(), this.mainNode.getRadius());
 
-            // 更新主节点状态，查看是否碰撞和通关
-            this.updateState(ts);
+            // 碰撞逻辑
+            this.collisionLogic(ts);
 
-            // 如果发生碰撞
+            // 如果发生碰撞,则游戏失败，弹出UI层，生产随便三角形
             if (this.isCollision)
             {
+                cc.log("碰撞了");
                 this.isCollision = false;
             }
-
-            // 如果通过障碍物
-            if (this.isPass)
-            {
-                this.isPass = false;
-                cc.log("通过障碍物");
-            }
         }
-
     },
 
-    // 更新当前游戏状态，是碰撞了，还是通关
     // 碰撞检测,分为和边缘碰撞、障碍物碰撞
-    updateState:function(ts)
+    collisionLogic:function(ts)
     {
         var size = cc.winSize;
 
@@ -188,26 +164,12 @@ var GameLayer = cc.Layer.extend({
         {
             //cc.log("和边框碰撞");
             this.isCollision = true;
-            this.isPass = false;
-            return;
         }
 
         // 2） 是否和障碍物碰撞
-        if (this.blockNode.checkCollision(mainPos, mainRad))
+        if (this.blockNode.getIsCollision())
         {
-            //cc.log("和障碍物碰撞");
             this.isCollision = true;
-            this.isPass = false;
-            return;
-        }
-
-        // 3)是否通过障碍物
-        if(this.blockNode.checkPass(mainPos, mainRad))
-        {
-            //cc.log("通过障碍物");
-            this.isCollision = false;
-            this.isPass = true;
-            return;
         }
     },
 
