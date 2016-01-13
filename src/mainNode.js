@@ -56,7 +56,7 @@ var MainNode = cc.Node.extend({
     createTriangle:function()
     {
         // 加载大三角形图片
-        for(i = 0; i < this.triangleNum; i++)
+        for(var i = 0; i < this.triangleNum; i++)
         {
             var bigSprite = new cc.Sprite(res.Triangle_png);
             bigSprite.setPosition(this.getPosition());
@@ -67,13 +67,13 @@ var MainNode = cc.Node.extend({
             var data = {
                 sprite:bigSprite,
                 speedX:this.speed * Math.sin(rot),
-                speedY:this.speed * Math.cos(rot)
+                speedY:this.speed * Math.cos(rot),
             }
             this.bigTriangle[i] = data;
         }
 
         // 加载小三角形图片
-        for(k = 0; k < this.triangleNum; k++)
+        for(var k = 0; k < this.triangleNum; k++)
         {
             var smallSprite = new cc.Sprite(res.Triangle_png);
             smallSprite.setScale(0.5);
@@ -87,7 +87,7 @@ var MainNode = cc.Node.extend({
             var data = {
                 sprite:smallSprite,
                 speedX:this.speed * Math.sin(rot),
-                speedY:this.speed * Math.cos(rot)
+                speedY:this.speed * Math.cos(rot),
             }
 
             this.smallTriangle[i] = data;
