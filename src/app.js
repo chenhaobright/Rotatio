@@ -37,7 +37,7 @@ var GameLayer = cc.Layer.extend({
 
         this.smallTriangle = [];
         this.bigTriangle = [];
-        this.triangleNum = 60;
+        this.triangleNum = 40;
         this.speed = 120;
 
     },
@@ -155,7 +155,7 @@ var GameLayer = cc.Layer.extend({
                 {
                     smallData.speedX = smallData.speedX * -1;
                 }
-                if(smallPosX + smallData.w >= cc.winSize.width && smallData.speedY >= 0)
+                if(smallPosX + smallData.w >= cc.winSize.width && smallData.speedX >= 0)
                 {
                     smallData.speedX = smallData.speedX * -1;
                 }
@@ -176,20 +176,20 @@ var GameLayer = cc.Layer.extend({
                 var bigPosY = bigSprite.getPositionY() + 2 * bigData.speedY * ts;
                 bigSprite.setPosition(cc.p(bigPosX, bigPosY));
 
-                if(smallPosX - bigData.w <= 0 && bigData.speedX <= 0)
+                if(bigPosX - bigData.w <= 0 && bigData.speedX <= 0)
                 {
                     bigData.speedX = bigData.speedX * -1;
                 }
-                if(smallPosX + bigData.w >= cc.winSize.width && bigData.speedY >= 0)
+                if(bigPosX + bigData.w >= cc.winSize.width && bigData.speedX >= 0)
                 {
                     bigData.speedX = bigData.speedX * -1;
                 }
 
-                if(smallPosY - bigData.h <= 0 && bigData.speedY <= 0)
+                if(bigPosY - bigData.h <= 0 && bigData.speedY <= 0)
                 {
                     bigData.speedY = bigData.speedY * -1;
                 }
-                if(smallPosY + bigData.h >= cc.winSize.height && bigData.speedY >= 0)
+                if(bigPosY + bigData.h >= cc.winSize.height && bigData.speedY >= 0)
                 {
                     bigData.speedY = bigData.speedY * -1;
                 }
@@ -251,6 +251,8 @@ var GameLayer = cc.Layer.extend({
                 w:bigSprite.getBoundingBox().width/2,
                 h:bigSprite.getBoundingBox().height/2,
             }
+
+            cc.log(bigSprite.getBoundingBox().width, bigSprite.getBoundingBox().height);
             this.bigTriangle[i] = data;
         }
 
