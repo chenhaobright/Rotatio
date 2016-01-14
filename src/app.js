@@ -37,7 +37,7 @@ var GameLayer = cc.Layer.extend({
 
         this.smallTriangle = [];
         this.bigTriangle = [];
-        this.triangleNum = 40;
+        this.triangleNum = 140;
         this.speed = 120;
 
     },
@@ -229,11 +229,14 @@ var GameLayer = cc.Layer.extend({
             cc.log("碰撞了");
             this.isStart = false;
             this.createTriangle();
+            this.clear();
         }
     },
 
     createTriangle:function()
     {
+        var scale = 0.5;
+
         // 加载大三角形图片
         var i = 0;
         for(i = 0; i < this.triangleNum; i++)
@@ -246,13 +249,15 @@ var GameLayer = cc.Layer.extend({
 
             var data = {
                 sprite:bigSprite,
-                speedX:this.speed * Math.sin(rot),
-                speedY:this.speed * Math.cos(rot),
+                speedX:this.speed * Math.sin(rot) + 100 * (Math.random() - 0.5),
+                speedY:this.speed * Math.cos(rot) + 100 * (Math.random() - 0.5),
                 w:bigSprite.getBoundingBox().width/2,
                 h:bigSprite.getBoundingBox().height/2,
             }
 
-            cc.log(bigSprite.getBoundingBox().width, bigSprite.getBoundingBox().height);
+            bigSprite.setScale(0.2);
+            bigSprite.runAction(cc.scaleTo(1.2, 1, 1));
+
             this.bigTriangle[i] = data;
         }
 
@@ -262,7 +267,7 @@ var GameLayer = cc.Layer.extend({
         for(k = 0; k < this.triangleNum; k++)
         {
             var smallSprite = new cc.Sprite(res.Triangle_png);
-            smallSprite.setScale(0.5);
+
             var hudu = this.mainNode.getRotation() * 3.14 / 180;
 
             var x = this.mainNode.getPositionX() + deltaLen * (2 * k - this.triangleNum) * Math.sin(hudu);
@@ -273,26 +278,71 @@ var GameLayer = cc.Layer.extend({
             var rot = 3.14 * Math.random() * 360 / 180;
             var data = {
                 sprite:smallSprite,
-                speedX:this.speed * Math.cos(rot),
-                speedY:this.speed * Math.sin(rot),
-                w:smallSprite.getBoundingBox().width/2,
-                h:smallSprite.getBoundingBox().height/2,
+                speedX:this.speed * Math.cos(rot) * scale + 100 * (Math.random() - 0.5),
+                speedY:this.speed * Math.sin(rot) * scale + 100 * (Math.random() - 0.5),
+                w:smallSprite.getBoundingBox().width/2 * scale,
+                h:smallSprite.getBoundingBox().height/2 * scale,
             }
+
+            smallSprite.setScale(0.2);
+            smallSprite.runAction(cc.scaleTo(1.2, scale, scale));
 
             this.smallTriangle[k] = data;
         }
 
     },
 
+    clear:function()
+    {
+        cc.eventManager.removeListener(this.touchListener, this);
+
+        var curScore = this.passCount;
+        var bestScore = parseInt(cc.sys.localStorage.getItem("BestScore", "0"));
+
+        if(curScore > bestScore)
+        {
+            cc.sys.localStorage.setItem("BestScore", bestScore);
+        }
+
+
+    },
 });
+
+var MenuLayer = cc.Layer.extend({
+    ctor:function()
+    {
+        this._super();
+        return true;
+    },
+
+    init:function()
+    {
+        // 声音开关
+
+        // 重新开始
+
+        // 分享链接
+
+        // 显示分数:本场分数,历史最高分数
+    },
+
+})
 
 var GameScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
-        cc.log(Math.floor(2/5));
-        var layer = new GameLayer();
-        layer.init();
 
-        this.addChild(layer);
+        var gameLayer = new GameLayer();
+        gameLayer.init();
+        this.addChild(gameLayer);
+
+        var menuLayer = new MenuLayer();
+        menuLayer.setPosition(cc.winSize.width / 2, cc.winSize.height / 2);
+
+        menuLayer.init();
+
+        menuLayer.setVisible(false);
+
+        this.addChild(menuLayer);
     }
 });
