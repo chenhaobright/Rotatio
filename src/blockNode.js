@@ -175,10 +175,8 @@ var BlockNode = cc.Node.extend({
         this.isCollision = false;
     },
 
-    update:function(ts, isOver, pos, rad)
+    update:function(ts, pos, rad)
     {
-        if (isOver) {return;}
-
         if (this.isFinish) {
             this.updateBlockNode(ts);
         }

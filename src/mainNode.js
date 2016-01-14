@@ -12,10 +12,6 @@ var MainNode = cc.Node.extend({
         // 每秒公转速度
         this.revolutionSpeed = 54;
 
-        this.smallTriangle = [];
-        this.bigTriangle = [];
-        this.triangleNum = 60;
-        this.speed = 20;
     },
 
     init:function()
@@ -51,48 +47,6 @@ var MainNode = cc.Node.extend({
          this.arrowNode4.drawSegment(cc.p(0, -this.radius * 0.7), cc.p(-this.radius * 0.7, 0), 2, cc.color(255, 0, 0));
          this.arrowNode4.setVisible(false);
          this.circleNode.addChild(this.arrowNode4);
-    },
-
-    createTriangle:function()
-    {
-        // 加载大三角形图片
-        for(var i = 0; i < this.triangleNum; i++)
-        {
-            var bigSprite = new cc.Sprite(res.Triangle_png);
-            bigSprite.setPosition(this.getPosition());
-            this.addChild(bigSprite);
-
-            var rot = 3.14 * Math.random() * 360 / 180;
-
-            var data = {
-                sprite:bigSprite,
-                speedX:this.speed * Math.sin(rot),
-                speedY:this.speed * Math.cos(rot),
-            }
-            this.bigTriangle[i] = data;
-        }
-
-        // 加载小三角形图片
-        for(var k = 0; k < this.triangleNum; k++)
-        {
-            var smallSprite = new cc.Sprite(res.Triangle_png);
-            smallSprite.setScale(0.5);
-            var x = this.getPositionX() + cc.winSize.height / (k + 1) * Math.sin(this.getRotation());
-            var y = this.getPositionY() + cc.winSize.height / (k + 1) * Math.cos(this.getRotation());
-            smallSprite.setPosition(cc.p(x, y));
-            this.addChild(smallSprite);
-
-            var rot = 3.14 * Math.random() * 360 / 180;
-
-            var data = {
-                sprite:smallSprite,
-                speedX:this.speed * Math.sin(rot),
-                speedY:this.speed * Math.cos(rot),
-            }
-
-            this.smallTriangle[i] = data;
-        }
-
     },
 
     getRadius:function()

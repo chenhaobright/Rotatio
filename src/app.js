@@ -35,6 +35,11 @@ var GameLayer = cc.Layer.extend({
 
         this.isOver = false;
 
+        this.smallTriangle = [];
+        this.bigTriangle = [];
+        this.triangleNum = 60;
+        this.speed = 120;
+
     },
 
     // 新的公转旋转点位置
@@ -130,18 +135,73 @@ var GameLayer = cc.Layer.extend({
             this.mainNode.setPosition(posX, posY);
 
             // 更新障碍物
-            this.blockNode.update(ts, this.isOver, this.mainNode.getPosition(), this.mainNode.getRadius());
+            this.blockNode.update(ts, this.mainNode.getPosition(), this.mainNode.getRadius());
 
             // 碰撞逻辑
-            this.collisionLogic(ts, this.isOver);
+            this.collisionLogic(ts);
         }
+        else if(this.isOver)
+        {
+            var k = 0;
+            for (k = 0; k < this.triangleNum; k++)
+            {
+                // 更新小三角形
+                var smallData = this.smallTriangle[k];
+                var smallSprite = smallData.sprite;
+                var smallPosX = smallSprite.getPositionX() + smallData.speedX * ts;
+                var smallPosY = smallSprite.getPositionY() + smallData.speedY * ts;
+                smallSprite.setPosition(cc.p(smallPosX, smallPosY));
+                if(smallPosX - smallData.w <= 0 && smallData.speedX <= 0)
+                {
+                    smallData.speedX = smallData.speedX * -1;
+                }
+                if(smallPosX + smallData.w >= cc.winSize.width && smallData.speedY >= 0)
+                {
+                    smallData.speedX = smallData.speedX * -1;
+                }
+
+                if(smallPosY - smallData.h <= 0 && smallData.speedY <= 0)
+                {
+                    smallData.speedY = smallData.speedY * -1;
+                }
+                if(smallPosY + smallData.h >= cc.winSize.height && smallData.speedY >= 0)
+                {
+                    smallData.speedY = smallData.speedY * -1;
+                }
+
+                // 更新大三角形
+                var bigData = this.bigTriangle[k];
+                var bigSprite = bigData.sprite;
+                var bigPosX = bigSprite.getPositionX() + 2 * bigData.speedX * ts;
+                var bigPosY = bigSprite.getPositionY() + 2 * bigData.speedY * ts;
+                bigSprite.setPosition(cc.p(bigPosX, bigPosY));
+
+                if(smallPosX - bigData.w <= 0 && bigData.speedX <= 0)
+                {
+                    bigData.speedX = bigData.speedX * -1;
+                }
+                if(smallPosX + bigData.w >= cc.winSize.width && bigData.speedY >= 0)
+                {
+                    bigData.speedX = bigData.speedX * -1;
+                }
+
+                if(smallPosY - bigData.h <= 0 && bigData.speedY <= 0)
+                {
+                    bigData.speedY = bigData.speedY * -1;
+                }
+                if(smallPosY + bigData.h >= cc.winSize.height && bigData.speedY >= 0)
+                {
+                    bigData.speedY = bigData.speedY * -1;
+                }
+
+            }
+        }
+
     },
 
     // 碰撞检测,分为和边缘碰撞、障碍物碰撞
-    collisionLogic:function(ts, isOver)
+    collisionLogic:function(ts)
     {
-        if(isOver) {return;}
-
         var size = cc.winSize;
 
         var mainPos = this.mainNode.getPosition();
@@ -167,8 +227,59 @@ var GameLayer = cc.Layer.extend({
         if (this.isOver)
         {
             cc.log("碰撞了");
-            this.mainNode.createTriangle();
+            this.isStart = false;
+            this.createTriangle();
         }
+    },
+
+    createTriangle:function()
+    {
+        // 加载大三角形图片
+        var i = 0;
+        for(i = 0; i < this.triangleNum; i++)
+        {
+            var bigSprite = new cc.Sprite(res.Triangle_png);
+            bigSprite.setPosition(this.mainNode.getPosition());
+            this.addChild(bigSprite);
+
+            var rot = 3.14 * Math.random() * 360 / 180;
+
+            var data = {
+                sprite:bigSprite,
+                speedX:this.speed * Math.sin(rot),
+                speedY:this.speed * Math.cos(rot),
+                w:bigSprite.getBoundingBox().width/2,
+                h:bigSprite.getBoundingBox().height/2,
+            }
+            this.bigTriangle[i] = data;
+        }
+
+        // 加载小三角形图片
+        var k = 0;
+        var deltaLen = cc.winSize.height / this.triangleNum;
+        for(k = 0; k < this.triangleNum; k++)
+        {
+            var smallSprite = new cc.Sprite(res.Triangle_png);
+            smallSprite.setScale(0.5);
+            var hudu = this.mainNode.getRotation() * 3.14 / 180;
+
+            var x = this.mainNode.getPositionX() + deltaLen * (2 * k - this.triangleNum) * Math.sin(hudu);
+            var y = this.mainNode.getPositionY() + deltaLen * (2 * k - this.triangleNum) * Math.cos(hudu);
+            smallSprite.setPosition(cc.p(x, y));
+            this.addChild(smallSprite);
+
+            var rot = 3.14 * Math.random() * 360 / 180;
+            var data = {
+                sprite:smallSprite,
+                speedX:this.speed * Math.cos(rot),
+                speedY:this.speed * Math.sin(rot),
+                w:smallSprite.getBoundingBox().width/2,
+                h:smallSprite.getBoundingBox().height/2,
+            }
+
+            this.smallTriangle[k] = data;
+        }
+
     },
 
 });
