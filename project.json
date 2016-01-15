@@ -15,6 +15,7 @@
         "src/resource.js",
         "src/app.js",
         "src/blockNode.js",
-        "src/mainNode.js"
+        "src/mainNode.js",
+        "src/over.js"
     ]
 }

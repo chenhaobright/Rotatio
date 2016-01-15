@@ -296,37 +296,28 @@ var GameLayer = cc.Layer.extend({
     {
         cc.eventManager.removeListener(this.touchListener, this);
 
-        var curScore = this.passCount;
-        var bestScore = parseInt(cc.sys.localStorage.getItem("BestScore", "0"));
+        var curScore = this.blockNode.getPassCount();
+        var bestScore = parseInt(cc.sys.localStorage.getItem("BestScore"));
+        cc.log(bestScore, cc.sys.localStorage.getItem("BestScore"), isNaN(bestScore));
+        if(isNaN(bestScore)){bestScore = 0;}
 
-        if(curScore > bestScore)
-        {
-            cc.sys.localStorage.setItem("BestScore", bestScore);
+        if(curScore > bestScore) {
+            bestScore = curScore;
         }
 
+        cc.log(curScore, bestScore);
 
+        cc.sys.localStorage.setItem("CurScore", curScore);
+        cc.sys.localStorage.setItem("BestScore", bestScore);
+
+        var menuLayer = cc.director.getRunningScene().getChildByName("MenuLayer");
+        if(menuLayer)
+        {
+            menuLayer.setVisible(true);
+            menuLayer.updateLabel();
+        }
     },
 });
-
-var MenuLayer = cc.Layer.extend({
-    ctor:function()
-    {
-        this._super();
-        return true;
-    },
-
-    init:function()
-    {
-        // 声音开关
-
-        // 重新开始
-
-        // 分享链接
-
-        // 显示分数:本场分数,历史最高分数
-    },
-
-})
 
 var GameScene = cc.Scene.extend({
     onEnter:function () {
@@ -343,6 +334,6 @@ var GameScene = cc.Scene.extend({
 
         menuLayer.setVisible(false);
 
-        this.addChild(menuLayer);
+        this.addChild(menuLayer, 10, "MenuLayer");
     }
 });
