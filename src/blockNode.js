@@ -168,7 +168,7 @@ var BlockNode = cc.Node.extend({
         else {
             this.passType = 0;
         }
-        this.setPositionX(this.getPositionX() + this.passType * this.passLen);
+        this.setPositionX(this.getPositionX() + this.passType * 1.5 * this.passLen);
 
         this.isFinish = false;
         this.isPass = false;

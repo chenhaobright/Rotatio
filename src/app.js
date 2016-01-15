@@ -328,10 +328,8 @@ var GameScene = cc.Scene.extend({
         this.addChild(gameLayer);
 
         var menuLayer = new MenuLayer();
-        menuLayer.setPosition(cc.winSize.width / 2, cc.winSize.height / 2);
-
         menuLayer.init();
-
+        menuLayer.setPosition(cc.winSize.width / 2, cc.winSize.height / 2);
         menuLayer.setVisible(false);
 
         this.addChild(menuLayer, 10, "MenuLayer");

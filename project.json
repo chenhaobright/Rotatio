@@ -16,6 +16,7 @@
         "src/app.js",
         "src/blockNode.js",
         "src/mainNode.js",
-        "src/over.js"
+        "src/over.js",
+        "src/blackscene.js"
     ]
 }

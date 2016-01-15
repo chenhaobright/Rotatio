@@ -38,6 +38,10 @@ var MenuLayer = cc.Layer.extend({
     restartCallback:function()
     {
         cc.log("restartCallback");
+
+        var scene = new BlackScene();
+        cc.director.runScene(new cc.TransitionFade(0.5, scene));
+        //cc.director.runScene(scene);
     },
 
     shareCallback:function()
