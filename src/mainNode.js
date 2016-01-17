@@ -74,8 +74,11 @@ var MainNode = cc.Node.extend({
     },
 
     // 更新三角形位置
-    update:function(ts, isStart, isOver)
+    update:function(ts, parent)
     {
+        var isStart = parent.isStart;
+        var isOver = parent.isOver;
+
         if(isOver)
         {
 

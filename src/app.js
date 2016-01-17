@@ -38,7 +38,7 @@ var GameLayer = cc.Layer.extend({
         this.smallTriangle = [];
         this.bigTriangle = [];
         this.triangleNum = 140;
-        this.speed = 120;
+        this.speed = 40;
 
     },
 
@@ -83,6 +83,11 @@ var GameLayer = cc.Layer.extend({
         this.addChild(this.dotNode);
 
         // 显示分数
+        this.scoreLabel = new cc.LabelTTF("");
+        this.scoreLabel.setFontSize(142);
+        this.scoreLabel.setPosition(size.width / 2, size.height / 2);
+        this.setOpacity(0);
+        this.addChild(this.scoreLabel);
     },
 
     // 初始化触摸事件
@@ -119,7 +124,7 @@ var GameLayer = cc.Layer.extend({
     // 每帧更新函数
     update:function (ts)
     {
-        this.mainNode.update(ts, this.isStart, this.isOver);
+        this.mainNode.update(ts, this);
 
         if (this.isStart)
         {
@@ -135,7 +140,7 @@ var GameLayer = cc.Layer.extend({
             this.mainNode.setPosition(posX, posY);
 
             // 更新障碍物
-            this.blockNode.update(ts, this.mainNode.getPosition(), this.mainNode.getRadius());
+            this.blockNode.update(ts, this);
 
             // 碰撞逻辑
             this.collisionLogic(ts);
@@ -199,6 +204,16 @@ var GameLayer = cc.Layer.extend({
 
     },
 
+    updateScoreLabel:function(score)
+    {
+        if (score < 1){return ;}
+
+        this.scoreLabel.setOpacity(255);
+        this.scoreLabel.setString("" + score);
+        this.scoreLabel.runAction(cc.fadeOut(1));
+
+    },
+
     // 碰撞检测,分为和边缘碰撞、障碍物碰撞
     collisionLogic:function(ts)
     {
@@ -223,12 +238,11 @@ var GameLayer = cc.Layer.extend({
             this.isOver = true;
         }
 
-        // 如果发生碰撞,则游戏失败，弹出UI层，生产随便三角形
+        // 如果发生碰撞,则游戏失败，弹出UI层，创建随机三角形
         if (this.isOver)
         {
             cc.log("碰撞了");
             this.isStart = false;
-            this.createTriangle();
             this.clear();
         }
     },
@@ -241,11 +255,14 @@ var GameLayer = cc.Layer.extend({
         var i = 0;
         for(i = 0; i < this.triangleNum; i++)
         {
-            var bigSprite = new cc.Sprite(res.Triangle_png);
-            bigSprite.setPosition(this.mainNode.getPosition());
-            this.addChild(bigSprite);
-
             var rot = 3.14 * Math.random() * 360 / 180;
+            var bigSprite = new cc.Sprite(res.Triangle_png);
+
+            // 设置随机位置
+            bigSprite.setPositionX(this.mainNode.getPositionX() + rot % 50);
+            bigSprite.setPositionY(this.mainNode.getPositionY() + rot % 50);
+
+            this.addChild(bigSprite);
 
             var data = {
                 sprite:bigSprite,
@@ -256,7 +273,7 @@ var GameLayer = cc.Layer.extend({
             }
 
             bigSprite.setScale(0.2);
-            bigSprite.runAction(cc.scaleTo(1.2, 1, 1));
+            bigSprite.runAction(cc.scaleTo(2.2, 1, 1));
 
             this.bigTriangle[i] = data;
         }
@@ -285,7 +302,7 @@ var GameLayer = cc.Layer.extend({
             }
 
             smallSprite.setScale(0.2);
-            smallSprite.runAction(cc.scaleTo(1.2, scale, scale));
+            smallSprite.runAction(cc.scaleTo(2.2, scale, scale));
 
             this.smallTriangle[k] = data;
         }
@@ -294,8 +311,13 @@ var GameLayer = cc.Layer.extend({
 
     clear:function()
     {
+        // 创建动态三角形
+        this.createTriangle();
+
+        // 移除触摸监听
         cc.eventManager.removeListener(this.touchListener, this);
 
+        // 显示战况信息
         var curScore = this.blockNode.getPassCount();
         var bestScore = parseInt(cc.sys.localStorage.getItem("BestScore"));
         cc.log(bestScore, cc.sys.localStorage.getItem("BestScore"), isNaN(bestScore));
@@ -316,6 +338,11 @@ var GameLayer = cc.Layer.extend({
             menuLayer.setVisible(true);
             menuLayer.updateLabel();
         }
+
+        // 隐藏UI
+        this.mainNode.setVisible(false);
+        this.blockNode.setVisible(false);
+
     },
 });
 

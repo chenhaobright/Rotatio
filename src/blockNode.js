@@ -16,7 +16,7 @@ var BlockNode = cc.Node.extend({
     {
         this._super();
 
-        this.moveSpeed = 300;       // 每秒前进多少像素
+        this.moveSpeed = 200;       // 每秒前进多少像素
 
         this.passLen = cc.winSize.width / 8;     // 通过阻挡大门的长度
 
@@ -108,6 +108,8 @@ var BlockNode = cc.Node.extend({
     // 重新更新阻挡块位置
     updateBlockNode:function(ts)
     {
+        if(this.isCollision){return; }
+
         var size = cc.winSize;
 
         // 生成阻挡块的方向
@@ -170,15 +172,21 @@ var BlockNode = cc.Node.extend({
         }
         this.setPositionX(this.getPositionX() + this.passType * 1.5 * this.passLen);
 
-        this.isFinish = false;
         this.isPass = false;
-        this.isCollision = false;
     },
 
-    update:function(ts, pos, rad)
+    update:function(ts, parent)
     {
         if (this.isFinish) {
-            this.updateBlockNode(ts);
+            this.isFinish = false;
+
+            // 执行闪烁动画完成后, 生成下一个block
+            var blink = cc.blink(0.5, 2);
+            var func = cc.callFunc(this.updateBlockNode, this, ts);
+            this.runAction(cc.sequence(blink, func));
+
+            parent.updateScoreLabel(this.passCount);
+
         }
 
         var dis = this.moveSpeed * ts * 0.5;
@@ -247,6 +255,9 @@ var BlockNode = cc.Node.extend({
             default:
                 cc.log("生成方向出错2")
         }
+
+        var pos = parent.mainNode.getPosition();
+        var rad = parent.mainNode.getRadius();
 
         this.checkCollision(pos, rad);
         this.checkPass(pos, rad);
@@ -340,6 +351,8 @@ var BlockNode = cc.Node.extend({
 
         if(this.isPass)
         {
+            this.isFinish = true;
+
             this.passCount = this.passCount + 1;
             if(this.passCount == 10)
             {
