@@ -341,6 +341,16 @@ var BlockNode = cc.Node.extend({
         if(this.isPass)
         {
             this.passCount = this.passCount + 1;
+            if(this.passCount == 10)
+            {
+                cc.log("speed up");
+                this.moveSpeed = this.moveSpeed * 1.2;    // 提速10%
+            }
+            else if(this.passCount == 20)
+            {
+                cc.log("blink start ");
+                this.runAction(cc.repeatForever(cc.blink(1, 1)));            // 开启闪烁功能;
+            }
 
             cc.log("通过次数：", this.passCount);
         }
