@@ -98,6 +98,10 @@ var GameLayer = cc.Layer.extend({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
             swallowTouches: true,
             onTouchBegan: function (touch, event) {
+                if(!self.isStart) {
+                    cc.audioEngine.playMusic(res.Start_ogg, false);
+                }
+
                 self.isStart = true;
                 self.isLongPress = true;
                 self.rotDir = 1;
@@ -243,6 +247,8 @@ var GameLayer = cc.Layer.extend({
         {
             cc.log("碰撞了");
             this.isStart = false;
+            cc.audioEngine.playEffect(res.Over_ogg, false);
+
             this.clear();
         }
     },

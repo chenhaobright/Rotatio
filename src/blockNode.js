@@ -365,6 +365,8 @@ var BlockNode = cc.Node.extend({
                 this.runAction(cc.repeatForever(cc.blink(1, 1)));            // 开启闪烁功能;
             }
 
+            cc.audioEngine.playEffect(res.PassCount_ogg, false);
+
             cc.log("通过次数：", this.passCount);
         }
     },
